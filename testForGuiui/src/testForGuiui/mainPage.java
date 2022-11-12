@@ -23,9 +23,9 @@ public class mainPage extends JFrame implements ActionListener{
 	JTable table;
 	Color b = new Color(204,229,255);
 	Color c = new Color(102,153,204);
-	Font font = new Font("Serif", Font.BOLD, 30);
-	Font font1 = new Font("Serif", Font.BOLD, 15);
-	Font font2 = new Font("맑은 고딕 ", Font.BOLD, 20);
+	Font font = new Font("Aharoni 굵게", Font.BOLD, 30);
+	Font font1 = new Font("Aharoni 굵게", Font.BOLD, 15);
+	Font font2 = new Font("Aharoni 굵게 ", Font.BOLD, 20);
 	JOptionPane aa=new JOptionPane();
 	
 	static String url = "jdbc:mysql://localhost/twittwe_db";
@@ -36,8 +36,8 @@ public class mainPage extends JFrame implements ActionListener{
 	static ResultSet rs2 = null;
     static PreparedStatement pstm = null;
 	
-	private Image img=new ImageIcon(mainPage.class.getResource("../image/profile1.png")).getImage();
-		
+	private Image img=new ImageIcon(mainPage.class.getResource("../image/profile-pic.png")).getImage();
+
 	    mainPage(String id)
 	    {
 	    	
@@ -82,7 +82,7 @@ public class mainPage extends JFrame implements ActionListener{
 	            @Override
 	            public void actionPerformed(ActionEvent e)
 	            {
-	            	new Board();
+	            	new Board(id);
 	                setVisible(false);
 				}
 	            }
@@ -150,7 +150,7 @@ public class mainPage extends JFrame implements ActionListener{
 			}
 	        
 	       
-	        Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+	        Image changeImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 	        ImageIcon changeIcon = new ImageIcon(changeImg);
 
 	        JLabel profile = new JLabel(changeIcon);
@@ -266,7 +266,6 @@ public class mainPage extends JFrame implements ActionListener{
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {
-	    		  // new post_page(eid); --> post page
 	    		   setVisible(false);
 	    	   } 
 	    	   }
@@ -286,6 +285,7 @@ public class mainPage extends JFrame implements ActionListener{
 						
 		}
 	    
+	  
 		
 	}
 

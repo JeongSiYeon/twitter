@@ -44,7 +44,7 @@ public class login
 
         jf.add(id_text);
 
-        JLabel password = new JLabel("비밀번호 : "); //비밀번호 안보이게 설
+        JLabel password = new JLabel("비밀번호 : "); //비밀번호 안보이게 설jd
         password.setSize(80,30);
         password.setLocation(30,190);
         jf.add(password);

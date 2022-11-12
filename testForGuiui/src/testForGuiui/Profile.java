@@ -62,6 +62,16 @@ public class Profile extends JFrame implements ActionListener{//profile home
             }
         });
 		exp.addActionListener(this);
+		exp.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            	new Board(eid);
+                setVisible(false);
+			}
+            }
+        );
 		prof.addActionListener(this);
 		prof.addActionListener(new ActionListener()
         {
