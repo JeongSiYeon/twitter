@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class pw_change
+public class pw_change//어디에 넣
 {
     public pw_change(String id)
     {

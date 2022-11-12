@@ -266,7 +266,7 @@ public class mainPage extends JFrame implements ActionListener{
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {
-	    		  // new post_page(eid);
+	    		  // new post_page(eid); --> post page
 	    		   setVisible(false);
 	    	   } 
 	    	   }

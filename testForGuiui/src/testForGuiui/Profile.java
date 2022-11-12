@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class Profile extends JFrame implements ActionListener{
+public class Profile extends JFrame implements ActionListener{//profile home
 	JMenuBar mb;
 	JMenu menu;
 	

@@ -41,7 +41,7 @@ public class sign_up
 
         signup.add(id_text);
 
-        JLabel password = new JLabel("비밀번호 : ");
+        JLabel password = new JLabel("비밀번호 : ");//안보이
         password.setSize(80,30);
         password.setLocation(70,140);
         password.setHorizontalAlignment(JLabel.CENTER);

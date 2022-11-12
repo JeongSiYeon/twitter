@@ -2,15 +2,15 @@ package testForGuiui;
 
 import java.sql.*;
 
-public class JDBC {
-	// �̰� static�� �´���..
+public class JDBC { //for profile
+	
 	static Connection conn = null;
 	
 	public static Connection connection() {	
 		try {
 			final String url = "jdbc:mysql://localhost/twittwe_db";
 		    final String user = "root";
-			final String passwd = "anselmochung24";
+			final String passwd = "anselmochung24"; 
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
@@ -25,7 +25,7 @@ public class JDBC {
 			e.printStackTrace();
 		}
 		
-		return conn;
+		return conn; 
 	}
 	
 	

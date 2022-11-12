@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Board {
+public class Board { //board 만들예
    
 	Board(){
         JFrame fr = new JFrame("This 프레임");
