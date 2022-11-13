@@ -1,0 +1,59 @@
+user : post = 1 : N
+하나의 user는 여러개의 post를 작성 할 수 있다.
+하나의 post는 하나의 유저만 작성할 수 있다.
+
+post( : comment = 1 : N
+하나의 post는 여러개의 comment가 달릴 수 있다.
+하나의 comment는 하나의 post에만 달 수 있다.
+
+post(comment) : hashtag = N : M
+하나의 post는 여러개의 hashtag를 가질 수 있다.
+하나의 hashtag는 여러개의 post에 달릴 수 있다.
+
+post(comment)  : mention = N : M
+하나의 post는 여러명의 mention_user를 가질 수 있다.
+하나의 mention_user는 여러개의 post에 태그될 수 있다.
+
+quote_post : post = 1 : N
+하나의quote_post는 여러개의 post를 가질 수 있다.
+하나의 post는 하나의 quote_post에 달릴 수 있다.
+
+post : retweet = 1 : N
+하나의 post는 여러개의 retweet를 받을 수 있다.
+하나의 retweet는 하나의 post에만 보내질 수 있다.
+
+user : like = 1 : N
+하나의 user는 여러개의(여러 포스트에) like를 할 수 있다.
+하나의 like는 하나의 user(like를 한 주체)만 가질 수 있다.
+
+post(또는 comment) : like = 1 : N
+하나의 post(또는 comment)는 여러개의 like를 받을 수 있다.
+하나의 like는 하나의 post(또는 comment)에만 보내질 수 있다.
+
+user : following = N : M
+하나의 user는 여러명을 following 할 수 있다.
+하나의 following(된 대상)은 여러 user로부터 팔로잉 받을 수 있다.
+
+user : block = N : M
+하나의 user는 여러명을 block 할 수 있다.
+하나의 block(대상)은 여러 user로부터 block 당할 수 있다.
+
+
+------ JDBC
+회원가입을 할 수 있다
+회원가입을 한 뒤 description을 추가로 작성할 수 있다
+회원가입 후 유저 정보를 수정할 수 있다.
+로그인을 할 수 있다.
+post(comment)를 작성할 수 있다.
+post(comment)를 작성하며 hashtag를 추가로 작성할 수 있다.
+post(comment)를 작성하며 mention(유저를 호출)를 추가로 작성할 수 있다.
+comment의 하위 댓글(child_comment)을 작성할 수 있다.
+post(comment)에 좋아요를 할 수 있다.
+post를 리트윗 할 수 있다.
+quote_post를 작성할 수 있다.(포스트를 인용하여 작성하는 기능)
+유저를 follow 할 수 있다.
+following 리스트를 볼 수 있다
+나를 follow 한 유저 리스트를 볼 수 있다
+내가 작성한 post(comment) list를 볼 수 있고 작성한 post(comment)를 수정할 수 있다
+타인의 board(작성한 글)를 볼 수 있다.
+유저를 block할 수 있다.
