@@ -34,7 +34,7 @@ public class mainPage extends JFrame implements ActionListener{
 	static Statement stmt = null;
 	static ResultSet rs = null;
 	static ResultSet rs2 = null;
-    static PreparedStatement pstm = null;
+    static PreparedStatement pstm = null;	
 	
 	private Image img=new ImageIcon(mainPage.class.getResource("../image/profile-pic.png")).getImage();
 
@@ -120,9 +120,9 @@ public class mainPage extends JFrame implements ActionListener{
 			
 	  
 	        JLabel jl = new JLabel("HOME");
-	        jl.setFont(font);
+	        jl.setFont(font1);
 	        jl.setSize(200,30);
-	        jl.setLocation(0,0);
+	        jl.setLocation(120,0);
 	        jl.setHorizontalAlignment(JLabel.CENTER);
 
 	        this.add(jl); 
@@ -138,7 +138,7 @@ public class mainPage extends JFrame implements ActionListener{
                     JLabel un = new JLabel(name); 
         	        un.setFont(font2);
         	        un.setSize(100,50);
-        	        un.setLocation(80,140);
+        	        un.setLocation(180,140);
         	        un.setHorizontalAlignment(JLabel.CENTER);
         	        this.add(un); 
 			           }
@@ -154,21 +154,21 @@ public class mainPage extends JFrame implements ActionListener{
 	        ImageIcon changeIcon = new ImageIcon(changeImg);
 
 	        JLabel profile = new JLabel(changeIcon);
-	        profile.setBounds(80,50,100,100);
+	        profile.setBounds(180,50,100,100);
 	        this.add(profile);
 	        
 	        JLabel jk = new JLabel("Write a Post!");
 	        jk.setFont(font1);
 	        jk.setSize(100,50);
-	        jk.setLocation(200,10);
+	        jk.setLocation(300,10);
 	        jk.setHorizontalAlignment(JLabel.CENTER);
 	        
 	        this.add(jk); 
 	        
 	        
 	        JTextField jt = new JTextField();
-	        jt.setSize(700,100);
-	        jt.setLocation(200,50);
+	        jt.setSize(600,100);
+	        jt.setLocation(300,50);
 	      
 
 	        this.add(jt);
@@ -259,12 +259,14 @@ public class mainPage extends JFrame implements ActionListener{
 	    		   return false;
 	    	   }
 	       };
-	       table.setSize(700,300);
-	       table.setLocation(200,200);
+	      
+	       table.setRowHeight(40);
 	       JScrollPane scroll = new JScrollPane(table);
-	       scroll.setPreferredSize(new Dimension(700,100));
+	       scroll.setSize(700,300);
+           scroll.setLocation(200,200);
+	      
 	       this.add(scroll);
-	       this.add(table);
+	       
 	       table.addMouseListener(new MouseAdapter () { 
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
