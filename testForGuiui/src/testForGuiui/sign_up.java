@@ -1,5 +1,4 @@
 package testForGuiui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,96 +10,110 @@ public class sign_up
     public sign_up()
     {
         JFrame signup = new JFrame();
-        signup.setSize(400,450);
+        signup.setSize(400,470);
         signup.setLocation(700,300);
         signup.setTitle("회원가입");
         signup.setLayout(null);
-        Color b=new Color(204,229,255);
+        Color b=new Color(255,255,255);
         signup.getContentPane().setBackground(b);
 
+        ImageIcon icon = new ImageIcon("twitter.png");
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(20, 15, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
 
-        JLabel main = new JLabel("< 회원가입 >");
-        main.setSize(130,30);
-        main.setLocation(130,40);
+        JLabel twitter = new JLabel(changeIcon);
+        twitter.setBounds(180,15,20,15);
+        signup.add(twitter);
+
+        JLabel main = new JLabel("Create your account");
+        main.setSize(200,30);
+        main.setLocation(90,40);
         main.setHorizontalAlignment(JLabel.CENTER);
-        Font myFont1 = new Font("Times", Font.BOLD, 20);
+        Font font2 = new Font("Aharoni 굵게",Font.BOLD,17);
 
-        main.setFont(myFont1);
+        main.setFont(font2);
         signup.add(main);
 
-        JLabel id = new JLabel("아이디 : ");
+        JLabel id = new JLabel("ID : ");
         id.setSize(80,30);
-        id.setLocation(70,90);
+        id.setLocation(63,90);
         id.setHorizontalAlignment(JLabel.CENTER);
-
+        id.setForeground(new Color(128,128,128));
         signup.add(id);
 
         JTextField id_text = new JTextField();
         id_text.setSize(150,30);
-        id_text.setLocation(140,90);
+        id_text.setLocation(120,90);
 
         signup.add(id_text);
 
-        JLabel password = new JLabel("비밀번호 : ");//안보이
+        JLabel password = new JLabel("PASSWORD : ");
         password.setSize(80,30);
-        password.setLocation(70,140);
-        password.setHorizontalAlignment(JLabel.CENTER);
-
+        password.setLocation(35,140);
+        password.setForeground(new Color(128,128,128));
         signup.add(password);
 
         JTextField password_text = new JTextField();
         password_text.setSize(150,30);
-        password_text.setLocation(140,140);
+        password_text.setLocation(120,140);
 
         signup.add(password_text);
 
-        JLabel name = new JLabel("이름 : ");
+        JLabel name = new JLabel("NAME : ");
         name.setSize(80,30);
         name.setLocation(70,190);
-        name.setHorizontalAlignment(JLabel.CENTER);
-
+        name.setForeground(new Color(128,128,128));
         signup.add(name);
 
         JTextField name_text = new JTextField();
         name_text.setSize(150,30);
-        name_text.setLocation(140,190);
+        name_text.setLocation(120,190);
 
         signup.add(name_text);
 
-        JLabel ph = new JLabel("전화번호 : ");
+        JLabel ph = new JLabel("PHONE : ");
         ph.setSize(80,30);
-        ph.setLocation(70,240);
-        ph.setHorizontalAlignment(JLabel.CENTER);
+        ph.setLocation(63,240);
+        ph.setForeground(new Color(128,128,128));
 
         signup.add(ph);
 
         JTextField ph_text = new JTextField();
         ph_text.setSize(150,30);
-        ph_text.setLocation(140,240);
+        ph_text.setLocation(120,240);
 
         signup.add(ph_text);
 
-        JLabel email = new JLabel("이메일 : ");
+        JLabel email = new JLabel("E-MAIL : ");
         email.setSize(80,30);
-        email.setLocation(70,290);
-        email.setHorizontalAlignment(JLabel.CENTER);
+        email.setLocation(65,290);
+        email.setForeground(new Color(128,128,128));
 
         signup.add(email);
 
         JTextField email_text = new JTextField();
         email_text.setSize(150,30);
-        email_text.setLocation(140,290);
+        email_text.setLocation(120,290);
 
         signup.add(email_text);
 
-        JButton done = new JButton("완료");
-        done.setSize(70,30);
-        done.setLocation(110,350);
+        JButton done = new JButton("Sign up");
+        done.setSize(350,30);
+        done.setLocation(15,340);
+        done.setFont(font2);
+        done.setBackground(new Color(0,172,238));
+        done.setForeground(new Color(255,255,255));
+        done.setOpaque(true);
+        done.setBorderPainted(false);
         signup.add(done);
 
-        JButton back = new JButton("취소");
-        back.setSize(70,30);
-        back.setLocation(200,350);
+        JButton back = new JButton("Back");
+        back.setSize(350,30);
+        back.setLocation(15,385);
+        back.setFont(font2);
+        back.setBackground(new Color(255,255,255));
+        back.setForeground(new Color(0,172,238));
         signup.add(back);
 
         done.addActionListener(new ActionListener()
@@ -117,11 +130,10 @@ public class sign_up
                 try
                 {
                     JOptionPane message = new JOptionPane();
-                    final String url = "jdbc:mysql://localhost/twittwe_db";
-        		    final String user = "root";
-        			final String passwd = "anselmochung24";
-                    String date = "2000-06-24";
-                    Connection connection = DriverManager.getConnection(url, user, passwd);
+                    String url = "jdbc:mysql://localhost/twittwe_db";
+                    String userName = "root";
+                	 String user_password = "anselmochung24";
+                    Connection connection = DriverManager.getConnection(url, userName, user_password);
 
                     Statement stmt = null;
                     ResultSet rs = null;

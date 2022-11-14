@@ -1,5 +1,4 @@
 package testForGuiui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,58 +9,95 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+
+
 public class login
 {
 	private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
-	
+
+
     public login()
     {
         JFrame jf = new JFrame();
-        jf.setSize(300,350);
+        jf.setSize(400,450);
         jf.setLocation(700,300);
         jf.setTitle("로그인");
         jf.setLayout(null);
-        Color b=new Color(204,229,255);
+        Color b=new Color(255,255,255);
+        Color c = new Color(0,172,238);
         jf.getContentPane().setBackground(b);
 
-        Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        Font font = new Font("Aharoni 굵게",Font.BOLD,30);
+        Font font2 = new Font("Aharoni 굵게",Font.BOLD,17);
+        Font font3 = new Font("Aharoni 굵게",Font.BOLD,13);
+
+        
+        Image changeImg = img.getScaledInstance(50, 45, Image.SCALE_SMOOTH);
         ImageIcon changeIcon = new ImageIcon(changeImg);
 
         JLabel twitter = new JLabel(changeIcon);
-        twitter.setBounds(100,30,100,100);
+        twitter.setBounds(10,15,50,45);
         jf.add(twitter);
 
-        JLabel id = new JLabel("아이디 : ");
-        id.setSize(80,30);
-        id.setLocation(30,150);
-        id.setHorizontalAlignment(JLabel.CENTER);
+        JLabel login_text = new JLabel("See what's happening in");
+        login_text.setSize(400,50);
+        login_text.setLocation(10,70);
+        login_text.setFont(font);
+        jf.add(login_text);
 
+
+        JLabel login_text2 = new JLabel("the world right now");
+        login_text2.setSize(400,50);
+        login_text2.setLocation(10,100);
+        login_text2.setFont(font);
+        jf.add(login_text2);
+
+        JLabel login_text3 = new JLabel("Join Twitter today.");
+        login_text3.setSize(400,50);
+        login_text3.setLocation(10,170);
+        login_text3.setFont(font2);
+        jf.add(login_text3);
+
+
+        JLabel id = new JLabel("ID : ");
+        id.setSize(30,30);
+        id.setLocation(90,320);
+        id.setHorizontalAlignment(JLabel.CENTER);
+        id.setForeground(new Color(128,128,128));
         jf.add(id);
 
         final JTextField id_text = new JTextField();
-        id_text.setSize(130,30);
-        id_text.setLocation(110,150);
-
+        id_text.setSize(200,30);
+        id_text.setLocation(120,320);
         jf.add(id_text);
 
-        JLabel password = new JLabel("비밀번호 : "); //비밀번호 안보이게 설jd
-        password.setSize(80,30);
-        password.setLocation(30,190);
+        JLabel password = new JLabel("PASSWORD : ");
+        password.setSize(90,30);
+        password.setLocation(36,360);
+        password.setForeground(new Color(128,128,128));
         jf.add(password);
 
         final JTextField password_text = new JTextField();
-        password_text.setSize(130,30);
-        password_text.setLocation(110,190);
+        password_text.setSize(200,30);
+        password_text.setLocation(120,360);
         jf.add(password_text);
 
-        JButton login = new JButton("로그인");
-        login.setSize(90,45);
-        login.setLocation(40,240);
-        jf.add(login); //jf프레임에 jb를 넣는다.
+        JButton login = new JButton("Log In");
+        login.setSize(350,35);
+        login.setLocation(15,265);
+        login.setFont(font3);
+        login.setBackground(b);
+        login.setForeground(c);
+        jf.add(login);
 
-        JButton signup = new JButton("회원가입");
-        signup.setSize(90,45);
-        signup.setLocation(150,240);
+        JButton signup = new JButton("Sign up");
+        signup.setSize(350,35);
+        signup.setLocation(15,220);
+        signup.setFont(font3);
+        signup.setBackground(new Color(0,172,238));
+        signup.setForeground(b);
+        signup.setOpaque(true);
+        signup.setBorderPainted(false);
         jf.add(signup);
 
         jf.setVisible(true);
@@ -87,10 +123,10 @@ public class login
                 try
                 {
                     JOptionPane message = new JOptionPane();
-                    final String url = "jdbc:mysql://localhost/twittwe_db";
-        		    final String user = "root";
-        			final String passwd = "anselmochung24";
-                    Connection connection = DriverManager.getConnection(url, user, passwd);
+                     String url = "jdbc:mysql://localhost/twittwe_db";
+                    String userName = "root";
+                	 String user_password = "anselmochung24";
+                    Connection connection = DriverManager.getConnection(url, userName, user_password);
 
                     Statement stmt = null;
                     ResultSet rs = null;
@@ -104,8 +140,8 @@ public class login
                         if(rs.next())
                         {
                             message.showMessageDialog(null, "로그인 성공!");
-                            jf.setVisible(false);
                             new mainPage(input_id);
+                            jf.setVisible(false);
                         }
                         else
                         {
@@ -129,7 +165,6 @@ public class login
 
     public static void main(String[] args)
     {
-       // new post_page("3");
-    	new login();
+        new login();
     }
 }

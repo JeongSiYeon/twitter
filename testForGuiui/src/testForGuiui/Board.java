@@ -19,6 +19,7 @@ public class Board extends JFrame implements ActionListener{
 	JMenuItem exit;
 	
 	JButton search;
+	JButton Explore;
 	JPanel panel;
 	JTable table;
 	JTable table1;
@@ -224,6 +225,7 @@ public class Board extends JFrame implements ActionListener{
 			   String data[][] = new String[100][3];
 			     
 		        table1.addMouseListener(new MouseAdapter () { 
+		        	
 			    	   @Override
 			    	   public void mouseClicked(MouseEvent e) {
 			    	   if (e.getButton() == 1) {
@@ -234,7 +236,7 @@ public class Board extends JFrame implements ActionListener{
 			   			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + sid + "\'";
 			   					   stmt = con.createStatement();
 			   			           rs = stmt.executeQuery(s3);
-
+			   			        
 			   			           int i = 0;
 			   			           while(rs.next())
 			   			           {
@@ -243,8 +245,7 @@ public class Board extends JFrame implements ActionListener{
 			   			               data[i][2] = rs.getString("content");
 			   			               i++;
 			   			           }
-			   			           
-			   					
+			   			          
 			   				}catch(SQLException E) {
 			   					E.printStackTrace();
 			   				}
@@ -283,12 +284,57 @@ public class Board extends JFrame implements ActionListener{
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {
-	    		   setVisible(false);
+	    		   int row = table.getSelectedRow();
+	    		   int col = table.getSelectedColumn();
+	    		   
+	    		   String roid = (String) table.getModel().getValueAt(row,0);
+	    		   var content = table.getModel().getValueAt(row, 2);
+	    		   try {
+	    			   Connection con = DriverManager.getConnection(url, user, passwd);
+	    		   try {
+	    			    
+	    			   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
+	    			   stmt = con.createStatement();
+			           rs = stmt.executeQuery(s3);
+			           
+			           while(rs.next()) {
+			        	   String poid = rs.getString("post_id");
+			        	   new post_page(poid, id); //여기에 포스트 페이지  
+			    		   setVisible(false);
+			           }
+			         
+	    		   }catch(SQLException E) {
+	    			   E.printStackTrace();
+	    		   }
+	    		   }catch(SQLException E) {
+	    			   E.printStackTrace();
+	    		   }
 	    	   } 
 	    	   }
 	    	   });
-	  
-		   
+	       
+	       
+	       	Explore = new JButton("Explore Users");  
+	       	Explore.setSize(250,45);
+	       	Explore.setLocation(200,510);
+	       	Explore.setFont(font1);
+	       	Explore.setForeground(new Color(0,172,238));
+	        this.add(Explore); 
+	        this.setVisible(true);
+	        Explore.addActionListener(this);
+	        Explore.addActionListener(new ActionListener() {
+	        	@Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    try {
+						new Explore(id);
+						setVisible(false);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                }
+	        });
 	       
 	    }
 	    @Override

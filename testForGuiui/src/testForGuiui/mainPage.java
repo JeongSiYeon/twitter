@@ -190,6 +190,7 @@ public class mainPage extends JFrame implements ActionListener{
 	        tweet = new JButton("TWEET");  
 	        tweet.setSize(90,45);
 	        tweet.setLocation(810,150);
+	        tweet.setForeground(new Color(0,172,238));
 	        this.add(tweet); 
 	        this.setVisible(true);
 	        tweet.addActionListener(this);;
@@ -222,23 +223,25 @@ public class mainPage extends JFrame implements ActionListener{
 	      
 	       try {
 				Connection con = DriverManager.getConnection(url, user, passwd);
+				
 				try {
+					
 					String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
 					   stmt = con.createStatement();
 			           rs = stmt.executeQuery(s2);
+			           int i = 0;
 			           while(rs.next())
 			           {
 			        String fid = rs.getString("followed_id");
 			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
 					   stmt = con.createStatement();
-			           rs = stmt.executeQuery(s3);
-
-			           int i = 0;
-			           while(rs.next())
+			           rs2 = stmt.executeQuery(s3);
+ 
+			           while(rs2.next())
 			           {
-			               data[i][0] = rs.getString("writer_id");
-			               data[i][1] = rs.getString("date");
-			               data[i][2] = rs.getString("content");
+			               data[i][0] = rs2.getString("writer_id");
+			               data[i][1] = rs2.getString("date");
+			               data[i][2] = rs2.getString("content");
 			               i++;
 			           }
 			           }
@@ -266,7 +269,32 @@ public class mainPage extends JFrame implements ActionListener{
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {
-	    		   setVisible(false);
+	    		   int row = table.getSelectedRow();
+	    		   int col = table.getSelectedColumn();
+	    		   
+	    		   String roid = (String) table.getModel().getValueAt(row,0);
+	    		   var content = table.getModel().getValueAt(row, 2);
+	    		   try {
+	    			   Connection con = DriverManager.getConnection(url, user, passwd);
+	    		   try {
+	    			    
+	    			   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
+	    			   stmt = con.createStatement();
+			           rs = stmt.executeQuery(s3);
+			           
+			           while(rs.next()) {
+			        	   String poid = rs.getString("post_id");
+			        	   new post_page(poid, id); //여기에 포스트 페이지  
+			    		   setVisible(false);
+			           }
+			         
+	    		   }catch(SQLException E) {
+	    			   E.printStackTrace();
+	    		   }
+	    		   }catch(SQLException E) {
+	    			   E.printStackTrace();
+	    		   }
+	    		
 	    	   } 
 	    	   }
 	    	   });

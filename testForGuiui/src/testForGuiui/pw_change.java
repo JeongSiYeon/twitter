@@ -1,12 +1,11 @@
 package testForGuiui;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class pw_change//어디에 넣
+public class pw_change
 {
     public pw_change(String id)
     {
@@ -15,52 +14,73 @@ public class pw_change//어디에 넣
         pw_change.setLocation(700,300);
         pw_change.setTitle("회원가입");
         pw_change.setLayout(null);
-        Color b=new Color(204,229,255);
+        Color b=new Color(255,255,255);
         pw_change.getContentPane().setBackground(b);
 
+        Font font1 = new Font("Aharoni 굵게",Font.BOLD,17);
+        Font font2 = new Font("Aharoni 굵게",Font.BOLD,12);
+        Font font3 = new Font("Aharoni 굵게",Font.BOLD,13);
 
-        JLabel main = new JLabel("< 비밀번호 변경 >");
-        main.setSize(170,30);
-        main.setLocation(110,40);
+        ImageIcon icon = new ImageIcon("twitter.png");
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(20, 15, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
+
+        JLabel twitter = new JLabel(changeIcon);
+        twitter.setBounds(180,15,20,15);
+        pw_change.add(twitter);
+
+        JLabel main = new JLabel("Password Change");
+        main.setSize(200,30);
+        main.setLocation(90,40);
         main.setHorizontalAlignment(JLabel.CENTER);
-        Font myFont1 = new Font("Times", Font.BOLD, 20);
-        main.setFont(myFont1);
+        main.setFont(font1);
         pw_change.add(main);
 
-        JLabel new_pw = new JLabel("새 비밀번호 : ");
-        new_pw.setSize(80,30);
-        new_pw.setLocation(70,90);
+        JLabel new_pw = new JLabel("New password : ");
+        new_pw.setSize(130,30);
+        new_pw.setLocation(50,90);
+        new_pw.setForeground(new Color(128,128,128));
+        new_pw.setFont(font2);
         new_pw.setHorizontalAlignment(JLabel.CENTER);
 
         pw_change.add(new_pw);
 
         JTextField new_pw_text = new JTextField();
         new_pw_text.setSize(150,30);
-        new_pw_text.setLocation(150,90);
+        new_pw_text.setLocation(170,90);
 
         pw_change.add(new_pw_text);
 
-        JLabel new_pw_check = new JLabel("새 비밀번호 확인 : ");
-        new_pw_check.setSize(100,30);
-        new_pw_check.setLocation(45,150);
+        JLabel new_pw_check = new JLabel("Confirm new password : ");
+        new_pw_check.setSize(150,30);
+        new_pw_check.setLocation(20,130);
+        new_pw_check.setForeground(new Color(128,128,128));
+        new_pw_check.setFont(font2);
         new_pw_check.setHorizontalAlignment(JLabel.LEFT);
 
         pw_change.add(new_pw_check);
 
         JTextField new_pw_check_text = new JTextField();
         new_pw_check_text.setSize(150,30);
-        new_pw_check_text.setLocation(150,150);
+        new_pw_check_text.setLocation(170,130);
 
         pw_change.add(new_pw_check_text);
 
-        JButton done = new JButton("완료");
-        done.setSize(70,30);
-        done.setLocation(110,200);
+        JButton done = new JButton("Password Change");
+        done.setSize(350,30);
+        done.setLocation(15,180);
+        done.setFont(font3);
+        done.setBackground(new Color(0,172,238));
+        done.setForeground(new Color(255,255,255));
         pw_change.add(done);
 
-        JButton back = new JButton("취소");
-        back.setSize(70,30);
-        back.setLocation(200,200);
+        JButton back = new JButton("Back");
+        back.setSize(350,30);
+        back.setLocation(15,220);
+        back.setFont(font3);
+        back.setBackground(new Color(255,255,255));
+        back.setForeground(new Color(0,172,238));
         pw_change.add(back);
 
         done.addActionListener(new ActionListener()
@@ -74,10 +94,10 @@ public class pw_change//어디에 넣
                 try
                 {
                     JOptionPane message = new JOptionPane();
-                    final String url = "jdbc:mysql://localhost/twittwe_db";
-        		    final String user = "root";
-        			final String passwd = "anselmochung24";
-                    Connection connection = DriverManager.getConnection(url, user, passwd);
+                    String url = "jdbc:mysql://localhost/twittwe_db";
+                    String userName = "root";
+                	 String user_password = "anselmochung24";
+                    Connection connection = DriverManager.getConnection(url, userName, user_password);
 
                     Statement stmt = null;
                     ResultSet rs = null;
