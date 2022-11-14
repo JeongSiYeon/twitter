@@ -48,7 +48,7 @@ public class Explore extends JFrame implements ActionListener{
     
 	Explore(String id) throws SQLException
 	{	 
-	    	
+		this.getContentPane().setBackground(b);
 		
 		
 		// JList를 제어하기 위해 model객체 생성////////////////////////////////////////////
@@ -114,8 +114,8 @@ public class Explore extends JFrame implements ActionListener{
 		
 		
 	
-		jframe.setTitle("Explore");
-		jframe.setSize(750,500);
+		jframe.setTitle("Follow more");
+		jframe.setSize(400,500);
 		Dimension frameSize = getSize();
 		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((windowSize.width - frameSize.width)/2,
@@ -128,7 +128,7 @@ public class Explore extends JFrame implements ActionListener{
 		jframe.add(tPane1, BorderLayout.CENTER);
 		
 		 back = new JButton("Back");
-         back.setBounds(600,25,100,25);;
+         back.setBounds(45,350,100,25);;
          back.addActionListener(new ActionListener()
          {
              @Override
@@ -140,13 +140,13 @@ public class Explore extends JFrame implements ActionListener{
          });
 		// 계정입력
 		JTextField t1 = new JTextField();
-		t1.setBounds(120,25,150,25);
+		t1.setBounds(90,25,150,25);
 		
-		JLabel l1 = new JLabel("계정입력 : ");
+		JLabel l1 = new JLabel("ID : ");
 		l1.setBounds(50,21,70,30);
 		
-		btn1 = new JButton("검색");
-		btn1.setBounds(290,25,100,25);
+		btn1 = new JButton("search");
+		btn1.setBounds(245,25,100,25);
 		
 		String getAccount = "select user_id from user";
 		String getBoard = "select follower_id from following where followed_id =\""+id+"\"";
@@ -173,7 +173,7 @@ public class Explore extends JFrame implements ActionListener{
 		scrollPane.setViewportView(searchList);    // 데이터가 아래로 내려갈 경우 아래로 자동으로 내려감
 		
 		pannelForAccount.add(scrollPane);
-		
+		pannelForAccount.setBackground(b);
 		
 		
 		
@@ -187,7 +187,7 @@ public class Explore extends JFrame implements ActionListener{
 		JPanel pannelForBoard = CreateScrollPanel(getBoard);
 		
 		tPane1.add("계정", pannelForAccount);
-		tPane1.add("보드", pannelForBoard);
+		
 		
 		// 계정 검색 Action
 		// 검색어를 포함! 하고 있는 id면 다 출력한다!
@@ -301,7 +301,7 @@ public class Explore extends JFrame implements ActionListener{
 			JPanel pannelForBoard = CreateScrollPanel(getBoard);
 			
 			t.add("계정", pannelForAccount);
-			t.add("보드", pannelForBoard);
+		
 			
 			return t;
 		}

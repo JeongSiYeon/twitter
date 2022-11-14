@@ -53,8 +53,8 @@ public class pw_change
         pw_change.add(new_pw_text);
 
         JLabel new_pw_check = new JLabel("Confirm new password : ");
-        new_pw_check.setSize(150,30);
-        new_pw_check.setLocation(20,130);
+        new_pw_check.setSize(170,30);
+        new_pw_check.setLocation(7,130);
         new_pw_check.setForeground(new Color(128,128,128));
         new_pw_check.setFont(font2);
         new_pw_check.setHorizontalAlignment(JLabel.LEFT);
@@ -73,6 +73,8 @@ public class pw_change
         done.setFont(font3);
         done.setBackground(new Color(0,172,238));
         done.setForeground(new Color(255,255,255));
+        done.setOpaque(true);
+        done.setBorderPainted(false);
         pw_change.add(done);
 
         JButton back = new JButton("Back");
@@ -82,6 +84,20 @@ public class pw_change
         back.setBackground(new Color(255,255,255));
         back.setForeground(new Color(0,172,238));
         pw_change.add(back);
+        back.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try {
+					new profilehome(id);
+					pw_change.setVisible(false);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+        });
 
         done.addActionListener(new ActionListener()
         {

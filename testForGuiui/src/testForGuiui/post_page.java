@@ -13,7 +13,7 @@ public class post_page
 	private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
 	private Image img2=new ImageIcon(mainPage.class.getResource("../image/like.png")).getImage();
 
-    public post_page(String post_idx,String user_id)
+    public post_page(String post_idx,String user_id, int k)
     {
         JFrame post_page = new JFrame();
         post_page.setSize(500,500);
@@ -225,7 +225,7 @@ public class post_page
                                     pstm.executeUpdate();
                                     message.showMessageDialog(null, "You did it like!");
                                     post_page.setVisible(false);
-                                    new post_page(post_idx,user_id);
+                                    new post_page(post_idx,user_id,k);
 
                                 }
                             }
@@ -257,8 +257,15 @@ public class post_page
                 {
                     @Override
                     public void actionPerformed(ActionEvent e)
-                    {
+                    {	
+                    	if(k == 1)
+                    	{
                         new mainPage(user_id);
+                    	}
+                    	else
+                    	{
+                    		new Board(user_id);
+                    	}
                         post_page.setVisible(false);
                     }
                 });
@@ -277,9 +284,9 @@ public class post_page
                                     " values ( \'" + user_id + "\', \'" + post_idx + "\', \'" + comment_text + "\',0,0,default)";
                             pstm = connection.prepareStatement(s1);
                             pstm.executeUpdate();
-
+                            
                             post_page.setVisible(false);
-                            new post_page(post_idx,user_id);
+                            new post_page(post_idx,user_id,k);
 
                         }
                         catch (SQLException E)
@@ -316,7 +323,7 @@ public class post_page
                                 pstm.executeUpdate();
 
                                 post_page.setVisible(false);
-                                new post_page(post_idx,user_id);
+                                new post_page(post_idx,user_id,k);
                             }
 
 

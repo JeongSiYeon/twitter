@@ -26,6 +26,7 @@ public class mainPage extends JFrame implements ActionListener{
 	Font font = new Font("Aharoni 굵게", Font.BOLD, 30);
 	Font font1 = new Font("Aharoni 굵게", Font.BOLD, 15);
 	Font font2 = new Font("Aharoni 굵게 ", Font.BOLD, 20);
+	 Font font3 = new Font("Aharoni 굵게",Font.BOLD,12);
 	JOptionPane aa=new JOptionPane();
 	
 	static String url = "jdbc:mysql://localhost/twittwe_db";
@@ -36,12 +37,14 @@ public class mainPage extends JFrame implements ActionListener{
 	static ResultSet rs2 = null;
     static PreparedStatement pstm = null;	
 	
-	private Image img=new ImageIcon(mainPage.class.getResource("../image/profile-pic.png")).getImage();
-
+	
+	private Image img2 =new ImageIcon(mainPage.class.getResource("../image/profile.png")).getImage();
+	private Image img3 =new ImageIcon(mainPage.class.getResource("../image/calendar.png")).getImage();
+	
 	    mainPage(String id)
 	    {
 	    	
-	       this.setSize(1000,640);
+	       this.setSize(500,640);
 	       this.setLocation(1000,500);
 	       this.setTitle("Twitter");
 	       this.setLayout(null);
@@ -94,7 +97,7 @@ public class mainPage extends JFrame implements ActionListener{
 	            public void actionPerformed(ActionEvent e)
 	            {
 	            	try {
-						new Profile(id);
+						new profilehome(id);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -117,12 +120,17 @@ public class mainPage extends JFrame implements ActionListener{
 	        );
 			exit.addActionListener(this);
 			
-			
+			Image changeImg2 = img2.getScaledInstance(500, 162, Image.SCALE_SMOOTH);
+	        ImageIcon changeIcon2 = new ImageIcon(changeImg2);
+
+	        JLabel profile_image = new JLabel(changeIcon2);
+	        profile_image.setBounds(0,0,500,162);
+	        this.add(profile_image);
 	  
 	        JLabel jl = new JLabel("HOME");
 	        jl.setFont(font1);
 	        jl.setSize(200,30);
-	        jl.setLocation(120,0);
+	        jl.setLocation(20,0);
 	        jl.setHorizontalAlignment(JLabel.CENTER);
 
 	        this.add(jl); 
@@ -135,12 +143,20 @@ public class mainPage extends JFrame implements ActionListener{
                     while(rs.next())
 			           {
                     String name = rs.getString("name");
-                    JLabel un = new JLabel(name); 
+                    JLabel un = new JLabel(id); 
         	        un.setFont(font2);
         	        un.setSize(100,50);
-        	        un.setLocation(180,140);
+        	        un.setLocation(25,150);
         	        un.setHorizontalAlignment(JLabel.CENTER);
         	        this.add(un); 
+        	        
+        	        JLabel profile_name = new JLabel("@" + name);
+                    profile_name.setSize(80,25);
+                    profile_name.setLocation(30,190);
+                    profile_name.setFont(font3);
+                    profile_name.setForeground(new Color(128,128,128));
+                    this.add(profile_name);
+        	        
 			           }
 				}catch(SQLException E) {
 					E.printStackTrace();
@@ -149,27 +165,28 @@ public class mainPage extends JFrame implements ActionListener{
 				E.printStackTrace();
 			}
 	        
-	       
-	        Image changeImg = img.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-	        ImageIcon changeIcon = new ImageIcon(changeImg);
-
-	        JLabel profile = new JLabel(changeIcon);
-	        profile.setBounds(180,50,100,100);
-	        this.add(profile);
+	        Image changeImg3 = img3.getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+            ImageIcon changeIcon3 = new ImageIcon(changeImg3);
+            JLabel calendar_image = new JLabel(changeIcon3);
+            calendar_image.setBounds(365,102,20,20);
+            this.add(calendar_image);
+            this.setVisible(true);
+	
 	        
 	        JLabel jk = new JLabel("Write a Post!");
-	        jk.setFont(font1);
-	        jk.setSize(100,50);
-	        jk.setLocation(300,10);
+	        jk.setFont(font3);
+	        jk.setSize(100,40);
+	        jk.setLocation(147,90);
 	        jk.setHorizontalAlignment(JLabel.CENTER);
 	        
 	        this.add(jk); 
 	        
 	        
 	        JTextField jt = new JTextField();
-	        jt.setSize(600,100);
-	        jt.setLocation(300,50);
-	      
+	        jt.setSize(345,100);
+	        jt.setLocation(150,120);
+	        
+	        
 
 	        this.add(jt);
 	        
@@ -182,14 +199,15 @@ public class mainPage extends JFrame implements ActionListener{
 	        String formatedNow = now.format(formatter);
 	        JLabel time = new JLabel(formatedNow);
 	        time.setSize(100,50);
-	        time.setLocation(800,0);
+	        time.setLocation(390,88);
 	        time.setHorizontalAlignment(JLabel.CENTER);
 	        
 	        this.add(time);
 	        
 	        tweet = new JButton("TWEET");  
-	        tweet.setSize(90,45);
-	        tweet.setLocation(810,150);
+	        tweet.setSize(90,35);
+	        tweet.setFont(font3);
+	        tweet.setLocation(405,220);
 	        tweet.setForeground(new Color(0,172,238));
 	        this.add(tweet); 
 	        this.setVisible(true);
@@ -244,6 +262,7 @@ public class mainPage extends JFrame implements ActionListener{
 			               data[i][2] = rs2.getString("content");
 			               i++;
 			           }
+			           
 			           }
 					
 				}catch(SQLException E) {
@@ -262,8 +281,8 @@ public class mainPage extends JFrame implements ActionListener{
 	      
 	       table.setRowHeight(40);
 	       JScrollPane scroll = new JScrollPane(table);
-	       scroll.setSize(700,300);
-           scroll.setLocation(200,200);
+	       scroll.setSize(480,300);
+           scroll.setLocation(10,260);
 	      
 	       this.add(scroll);
 	       
@@ -279,14 +298,14 @@ public class mainPage extends JFrame implements ActionListener{
 	    		   try {
 	    			   Connection con = DriverManager.getConnection(url, user, passwd);
 	    		   try {
-	    			    
+	    			   int k = 1;
 	    			   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
 	    			   stmt = con.createStatement();
 			           rs = stmt.executeQuery(s3);
 			           
 			           while(rs.next()) {
 			        	   String poid = rs.getString("post_id");
-			        	   new post_page(poid, id); //여기에 포스트 페이지  
+			        	   new post_page(poid, id, k); //여기에 포스트 페이지  
 			    		   setVisible(false);
 			           }
 			         

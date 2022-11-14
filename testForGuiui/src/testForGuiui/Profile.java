@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class Profile extends JFrame implements ActionListener{//profile home
 	JMenuBar mb;
-	JMenu menu;
+	JMenu Back;
 	
 	JMenuItem home;
 	JMenuItem exp;
@@ -18,11 +18,12 @@ public class Profile extends JFrame implements ActionListener{//profile home
 	JMenuItem exit;
 	JOptionPane aa=new JOptionPane();
 	Color b = new Color(204,229,255);
+	JButton back;
 	
 	public Profile(String eid) throws SQLException {
-		 this.getContentPane().setBackground(b);
-		setTitle("Profile");
-		setSize(750,500);
+		this.getContentPane().setBackground(b);
+		setTitle("follow/following");
+		setSize(400,500);
 		Dimension frameSize = getSize();
 		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((windowSize.width - frameSize.width)/2,
@@ -34,19 +35,13 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setVisible(true);	
 		mb = new JMenuBar();
-		menu = new JMenu("MENU");
-		home = new JMenuItem("HOME");
-		exp = new JMenuItem("#EXPLORE");
-		prof = new JMenuItem("PROFILE");
-		logout = new JMenuItem("LOGOUT");
-		exit = new JMenuItem("EXIT");
+		Back = new JMenu("Back");
+		home = new JMenuItem("Profile");
 		
-		mb.add(menu);
-		menu.add(home);
-		menu.add(exp);
-		menu.add(prof);
-		menu.add(logout);
-		menu.add(exit);
+		
+		mb.add(Back);
+		Back.add(home);
+		
 		
 
 		this.setJMenuBar(mb);
@@ -57,50 +52,18 @@ public class Profile extends JFrame implements ActionListener{//profile home
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                new mainPage(eid);
-                setVisible(false);
-            }
-        });
-		exp.addActionListener(this);
-		exp.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-            	new Board(eid);
-                setVisible(false);
-			}
-            }
-        );
-		prof.addActionListener(this);
-		prof.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
             	try {
-					new Profile(eid);
+					new profilehome(eid);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				setVisible(false);
-			}
+                setVisible(false);
             }
-        );
-		logout.addActionListener(this);
-		logout.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-            	aa.showMessageDialog(null, "Are you Sure to logout?");
-            	new login();
-				setVisible(false);
-			}
-            }
-        );
-		exit.addActionListener(this);
+        });
+		
+		
+		 
 		
 	}
 	
@@ -111,6 +74,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		panel.setLayout(null);
 		
 		JTextArea resultArea = new JTextArea();
+		resultArea.setEnabled(false);
 		rs = getResult(query);
 		
 		// put result
@@ -128,20 +92,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
 
 		return panel;
 	}
-	
-	private JLabel UserInfoPane(String query) throws SQLException {	
-		String result = null;
-		JLabel label = new JLabel();
-		
-		ResultSet rs = null;		
-		rs = getResult(query);
-		
-		rs.next();
-		result = rs.getString(1) + rs.getString(3) + rs.getString(6);
-		label.setText(result);
-		
-		return label;
-	}
+
 	
 	// Tab
 	public JTabbedPane createTabbedPane(String eid) throws SQLException {
@@ -150,15 +101,15 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		
 		String getFollow = "select followed_id from following where follower_id =\""+eid+"\"";
 		String getFollower = "select follower_id from following where followed_id =\""+eid+"\"";
-		String getUserInfo = "select * from user where user_id =\""+eid+"\"";
+		
 		
 		JPanel pannelForFollow = CreateScrollPanel(getFollow); 
 		JPanel pannelForFollower = CreateScrollPanel(getFollower);
-		JLabel userLabel = UserInfoPane(getUserInfo);
+	
 		
-		t.add("profile home", userLabel);
-		t.add("팔로우", pannelForFollow);
-		t.add("팔로워", pannelForFollower);
+		
+		t.add("Following", pannelForFollow);
+		t.add("Follower", pannelForFollower);
 		
 		return t;
 	}

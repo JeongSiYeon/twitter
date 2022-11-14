@@ -1,6 +1,7 @@
 package testForGuiui;
 import java.time.LocalDate;
 
+import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.*;
@@ -39,11 +40,11 @@ public class Board extends JFrame implements ActionListener{
     static PreparedStatement pstm = null;
     private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
     private Image sear=new ImageIcon(mainPage.class.getResource("../image/search.png")).getImage();
-		
+    private Image img3 =new ImageIcon(mainPage.class.getResource("../image/calendar.png")).getImage();	
 	    Board(String id)
 	    {
 	    	
-	       this.setSize(1000,640);
+	       this.setSize(590,640);
 	       this.setLocation(1000,500);
 	       this.setTitle("Twitter");
 	       this.setLayout(null);
@@ -96,7 +97,7 @@ public class Board extends JFrame implements ActionListener{
 	            public void actionPerformed(ActionEvent e)
 	            {
 	            	try {
-						new Profile(id);
+						new profilehome(id);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -120,27 +121,32 @@ public class Board extends JFrame implements ActionListener{
 			exit.addActionListener(this);
 			
 			
-			Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+			Image changeImg = img.getScaledInstance(50, 45, Image.SCALE_SMOOTH);
 	        ImageIcon changeIcon = new ImageIcon(changeImg);
 
 	        JLabel twitter = new JLabel(changeIcon);
-	        twitter.setBounds(80,50,100,100);
+	        twitter.setBounds(220,26,50, 45);
 	        this.add(twitter);
 	  
 	        JLabel jl = new JLabel("#Explore Board");
 	        jl.setFont(font2);
-	        jl.setSize(300,100);
+	        jl.setSize(250,100);
 	        jl.setLocation(0,0);
 	        jl.setHorizontalAlignment(JLabel.CENTER);
 
 	        this.add(jl); 
 	        
-    
+	        Image changeImg3 = img3.getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+            ImageIcon changeIcon3 = new ImageIcon(changeImg3);
+            JLabel calendar_image = new JLabel(changeIcon3);
+            calendar_image.setBounds(50,80,18,18);
+            this.add(calendar_image);
+            this.setVisible(true);
 	        
 	        JLabel jk = new JLabel("Search ID: ");
 	        jk.setFont(font1);
 	        jk.setSize(100,200);
-	        jk.setLocation(410,20);
+	        jk.setLocation(50,20);
 	       
 	        
 	        this.add(jk); 
@@ -148,7 +154,7 @@ public class Board extends JFrame implements ActionListener{
 	        
 	        JTextField jt = new JTextField();
 	        jt.setSize(100,25);
-	        jt.setLocation(500,107);
+	        jt.setLocation(140,107);
 	      
 
 	        this.add(jt);
@@ -163,17 +169,17 @@ public class Board extends JFrame implements ActionListener{
 	        String formatedNow = now.format(formatter);
 	        JLabel time = new JLabel(formatedNow);
 	        time.setSize(100,50);
-	        time.setLocation(800,0);
+	        time.setLocation(70,65);
 	        time.setHorizontalAlignment(JLabel.CENTER);
 	        
 	        this.add(time);
 	        
-	        Image changeImg2 = sear.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+	        Image changeImg2 = sear.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	        ImageIcon changeIcon2 = new ImageIcon(changeImg2);
 	        
 	        search = new JButton(changeIcon2);  
-	        search.setSize(25,25);
-	        search.setLocation(600,107);
+	        search.setSize(20,20);
+	        search.setLocation(240,108);
 	        this.add(search); 
 	        this.setVisible(true);
 	        search.addActionListener(this);;
@@ -214,21 +220,32 @@ public class Board extends JFrame implements ActionListener{
 		    		   return false;
 		    	   }
 		       };
-		       table1.setSize(700,20);
-		       table1.setLocation(200,150);
+		       table1.setSize(490,20);
+		       table1.setLocation(50,150);
 		       JScrollPane scroll1 = new JScrollPane(table1);
 		       scroll1.setPreferredSize(new Dimension(700,100));
 		       this.add(scroll1);
 		       this.add(table1);
 		       
+		       /*상대방 보드 출*/
 		       String post[] = {"id", "create_time", "post_content"};
-			   String data[][] = new String[100][3];
-			     
+		       String data[][] = new String[100][3];
+		       table = new JTable(data, post) {
+		    	   public boolean isCellEditable(int row, int column) {
+		    		   return false;
+		    	   }
+		       };
+		       table.setRowHeight(40);
+		       JScrollPane scroll = new JScrollPane(table);
+		       scroll.setSize(490,300);
+	           scroll.setLocation(50,200);
+		       this.add(scroll);
 		        table1.addMouseListener(new MouseAdapter () { 
 		        	
 			    	   @Override
 			    	   public void mouseClicked(MouseEvent e) {
 			    	   if (e.getButton() == 1) {
+			    		   int row = table1.getSelectedRow();
 			    		   try {
 			   				Connection con = DriverManager.getConnection(url, user, passwd);
 			   				try {
@@ -245,7 +262,7 @@ public class Board extends JFrame implements ActionListener{
 			   			               data[i][2] = rs.getString("content");
 			   			               i++;
 			   			           }
-			   			          
+
 			   				}catch(SQLException E) {
 			   					E.printStackTrace();
 			   				}
@@ -258,28 +275,15 @@ public class Board extends JFrame implements ActionListener{
 		        
 		       JLabel list = new JLabel("User's Board");
 		        list.setFont(font1);
-		        list.setSize(300,20);
-		        list.setLocation(100,175);
-		        list.setHorizontalAlignment(JLabel.CENTER);
+		        list.setSize(250,20);
+		        list.setLocation(50,175);
+		        
 
 		        this.add(list); 
-		        
-		        
-	      
+		       
 	       
 	      
 	       
-	       table = new JTable(data, post) {
-	    	   public boolean isCellEditable(int row, int column) {
-	    		   return false;
-	    	   }
-	       };
-	       table.setSize(700,300);
-	       table.setLocation(200,200);
-	       JScrollPane scroll = new JScrollPane(table);
-	       scroll.setPreferredSize(new Dimension(700,100));
-	       this.add(scroll);
-	       this.add(table);
 	       table.addMouseListener(new MouseAdapter () { 
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
@@ -292,14 +296,14 @@ public class Board extends JFrame implements ActionListener{
 	    		   try {
 	    			   Connection con = DriverManager.getConnection(url, user, passwd);
 	    		   try {
-	    			    
+	    			   int k = 2;
 	    			   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
 	    			   stmt = con.createStatement();
 			           rs = stmt.executeQuery(s3);
 			           
 			           while(rs.next()) {
 			        	   String poid = rs.getString("post_id");
-			        	   new post_page(poid, id); //여기에 포스트 페이지  
+			        	   new post_page(poid, id, k); //여기에 포스트 페이지  
 			    		   setVisible(false);
 			           }
 			         
@@ -314,9 +318,9 @@ public class Board extends JFrame implements ActionListener{
 	    	   });
 	       
 	       
-	       	Explore = new JButton("Explore Users");  
-	       	Explore.setSize(250,45);
-	       	Explore.setLocation(200,510);
+	       	Explore = new JButton("Follow more");  
+	       	Explore.setSize(150,35);
+	       	Explore.setLocation(50,510);
 	       	Explore.setFont(font1);
 	       	Explore.setForeground(new Color(0,172,238));
 	        this.add(Explore); 
