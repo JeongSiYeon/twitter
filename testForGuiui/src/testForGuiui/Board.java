@@ -183,14 +183,20 @@ public class Board extends JFrame implements ActionListener{
 	        this.add(search); 
 	        this.setVisible(true);
 	        search.addActionListener(this);;
-	        String found[] = {"id", "name", "post_content"};
+	          String found[] = {"id", "name", "post_content"};
 		      String fdata[][] = new String[100][3];
+		      
+		      /*상대방 보드 출*/
+		       String post[] = {"id", "create_time", "post_content"};
+		       String data[][] = new String[100][3];
+		       
 	        search.addActionListener(new ActionListener()
 	        {
 	            @Override
 	            public void actionPerformed(ActionEvent e)
 	            {
 	            	String sid = jt.getText();
+	            	
 	            	try {
 						Connection con = DriverManager.getConnection(url, user, passwd);
 						try {
@@ -198,13 +204,39 @@ public class Board extends JFrame implements ActionListener{
 							   stmt = con.createStatement();
 					           rs = stmt.executeQuery(s2);
 					           int i = 0;
-							while(rs.next()) {
+							while(rs.next()) { // 사용자 검색 테이블 
 								fdata[i][0] = rs.getString("user_id");
 					            fdata[i][1] = rs.getString("name");
 					            fdata[i][2] = rs.getString("create_at");
 					            i++;
 					            aa.showMessageDialog(null, "Founded!"); 
 							}
+							try {
+			   					
+			   			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + sid + "\'";
+			   					   stmt = con.createStatement();
+			   			           rs = stmt.executeQuery(s3);
+			   			          
+			   			           int k = 0;
+			   			           while(rs.next()) //사용자 검색 게시글 출력 테이블  
+			   			           {
+			   			               data[k][0] = rs.getString("writer_id");
+			   			               data[k][1] = rs.getString("date");
+			   			               data[k][2] = rs.getString("content");
+			   			               k++;
+			   			           }
+			   			           
+			   			        for(int j = k; j < 100; j++)
+			   			           {
+			   			        	   for(int p = 0; p < 3; p++)
+			   			        	   {
+			   			        		   data[j][p] = " ";
+			   			        	   }
+			   			           }
+ 
+			   				}catch(SQLException E) {
+			   					E.printStackTrace();
+			   				}
 							
 						}catch(SQLException E) {
 							E.printStackTrace();
@@ -215,7 +247,9 @@ public class Board extends JFrame implements ActionListener{
 	            	
 	            }
 	        });
-	        table1 = new JTable(fdata, found) {
+	        
+	        
+	           table1 = new JTable(fdata, found) {
 		    	   public boolean isCellEditable(int row, int column) {
 		    		   return false;
 		    	   }
@@ -226,10 +260,29 @@ public class Board extends JFrame implements ActionListener{
 		       scroll1.setPreferredSize(new Dimension(700,100));
 		       this.add(scroll1);
 		       this.add(table1);
-		       
-		       /*상대방 보드 출*/
-		       String post[] = {"id", "create_time", "post_content"};
-		       String data[][] = new String[100][3];
+		       table1.addMouseListener(new MouseAdapter () { 
+		    	   @Override
+		    	   public void mouseClicked(MouseEvent e) {
+		    	   if (e.getButton() == 1) {
+		    		   String ssid = data[0][0];
+		    		   
+		    		   try {
+						new SCprofilehome(id, ssid);
+						setVisible(false);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    		   
+		    	   } 
+		    	   }
+		    	   });
+		       JLabel list = new JLabel("User's Board");
+		        list.setFont(font1);
+		        list.setSize(250,20);
+		        list.setLocation(50,175);
+		        this.add(list); 
+		    
 		       table = new JTable(data, post) {
 		    	   public boolean isCellEditable(int row, int column) {
 		    		   return false;
@@ -240,51 +293,14 @@ public class Board extends JFrame implements ActionListener{
 		       scroll.setSize(490,300);
 	           scroll.setLocation(50,200);
 		       this.add(scroll);
-		        table1.addMouseListener(new MouseAdapter () { 
-		        	 
-			    	   @Override
-			    	   public void mouseClicked(MouseEvent e) {
-			    	   if (e.getButton() == 1) {
-			    		   int row = table1.getSelectedRow();
-			    		   try {
-			   				Connection con = DriverManager.getConnection(url, user, passwd);
-			   				try {
-			   					String sid = fdata[0][0];
-			   			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + sid + "\'";
-			   					   stmt = con.createStatement();
-			   			           rs = stmt.executeQuery(s3);
-			   			        
-			   			           int i = 0;
-			   			           while(rs.next())
-			   			           {
-			   			               data[i][0] = rs.getString("writer_id");
-			   			               data[i][1] = rs.getString("date");
-			   			               data[i][2] = rs.getString("content");
-			   			               i++;
-			   			           }
- 
-			   				}catch(SQLException E) {
-			   					E.printStackTrace();
-			   				}
-			   			}catch(SQLException E) {
-			   				E.printStackTrace();
-			   			}
-			    	   } 
-			    	   }
-			    	   });
+		      
 		        
-		       JLabel list = new JLabel("User's Board");
-		        list.setFont(font1);
-		        list.setSize(250,20);
-		        list.setLocation(50,175);
 		        
-
-		        this.add(list); 
 		       
 	       
 	      
 	       
-	       table.addMouseListener(new MouseAdapter () { 
+	           table.addMouseListener(new MouseAdapter () { 
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {

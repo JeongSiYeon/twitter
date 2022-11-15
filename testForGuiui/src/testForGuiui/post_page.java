@@ -192,8 +192,9 @@ public class post_page
                 comment_table.setFont(font3);
                 scrollpane.setSize(450,150);
                 scrollpane.setLocation(20,310);
+                
                 post_page.add(scrollpane);
-
+                
                 comment_table.addMouseListener(new MouseAdapter()
                 {
                     @Override
@@ -261,12 +262,14 @@ public class post_page
                     	if(k == 1)
                     	{
                         new mainPage(user_id);
+                        post_page.setVisible(false);
                     	}
                     	else
                     	{
                     		new Board(user_id);
+                    		post_page.setVisible(false);
                     	}
-                        post_page.setVisible(false);
+                        
                     }
                 });
 
