@@ -25,7 +25,7 @@ public class post_page
         
         try
         {
-           
+            
             Image changeImg = img.getScaledInstance(45, 37, Image.SCALE_SMOOTH);
             ImageIcon changeIcon = new ImageIcon(changeImg);
 

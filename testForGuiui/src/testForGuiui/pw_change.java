@@ -8,7 +8,7 @@ import java.sql.*;
 public class pw_change
 {
     public pw_change(String id)
-    {
+    { 
         JFrame pw_change = new JFrame();
         pw_change.setSize(400,300);
         pw_change.setLocation(700,300);

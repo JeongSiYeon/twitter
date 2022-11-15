@@ -262,7 +262,7 @@ public class Board extends JFrame implements ActionListener{
 			   			               data[i][2] = rs.getString("content");
 			   			               i++;
 			   			           }
-
+ 
 			   				}catch(SQLException E) {
 			   					E.printStackTrace();
 			   				}

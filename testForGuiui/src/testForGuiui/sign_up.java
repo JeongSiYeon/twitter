@@ -21,7 +21,7 @@ public class sign_up
         Image img = icon.getImage();
         Image changeImg = img.getScaledInstance(20, 15, Image.SCALE_SMOOTH);
         ImageIcon changeIcon = new ImageIcon(changeImg);
-
+ 
         JLabel twitter = new JLabel(changeIcon);
         twitter.setBounds(180,15,20,15);
         signup.add(twitter);

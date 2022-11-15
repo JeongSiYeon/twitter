@@ -283,7 +283,7 @@ public class mainPage extends JFrame implements ActionListener{
 	       JScrollPane scroll = new JScrollPane(table);
 	       scroll.setSize(480,300);
            scroll.setLocation(10,260);
-	      
+	       
 	       this.add(scroll);
 	       
 	       table.addMouseListener(new MouseAdapter () { 

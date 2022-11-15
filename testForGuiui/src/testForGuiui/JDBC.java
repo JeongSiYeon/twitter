@@ -5,7 +5,7 @@ import java.sql.*;
 public class JDBC { //for profile
 	
 	static Connection conn = null;
-	
+	 
 	public static Connection connection() {	
 		try {
 			final String url = "jdbc:mysql://localhost/twittwe_db";

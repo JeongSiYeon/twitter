@@ -150,7 +150,7 @@ public class Explore extends JFrame implements ActionListener{
 		
 		String getAccount = "select user_id from user";
 		String getBoard = "select follower_id from following where followed_id =\""+id+"\"";
-		
+		 
 		
 		
 		// pannelForAccount = CreateScrollPanel(getAccount); 

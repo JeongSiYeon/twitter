@@ -120,7 +120,7 @@ public class profilehome
             following_num.setFont(font3);
             profile.add(following_num);
             following_num.addMouseListener(new MouseAdapter()
-            {
+            { 
             	@Override
                 public void mouseClicked(MouseEvent e)
                 {

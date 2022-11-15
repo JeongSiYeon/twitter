@@ -89,7 +89,7 @@ public class login
         login.setBackground(b);
         login.setForeground(c);
         jf.add(login);
-
+ 
         JButton signup = new JButton("Sign up");
         signup.setSize(350,35);
         signup.setLocation(15,220);
