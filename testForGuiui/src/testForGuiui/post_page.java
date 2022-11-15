@@ -22,7 +22,7 @@ public class post_page
         post_page.setLayout(null);
         Color b=new Color(255,255,255);
         post_page.getContentPane().setBackground(b);
-        
+         
         try
         {
             

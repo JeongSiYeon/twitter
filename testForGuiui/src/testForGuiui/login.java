@@ -65,7 +65,7 @@ public class login
         id.setHorizontalAlignment(JLabel.CENTER);
         id.setForeground(new Color(128,128,128));
         jf.add(id);
-
+ 
         final JTextField id_text = new JTextField();
         id_text.setSize(200,30);
         id_text.setLocation(120,320);

@@ -62,7 +62,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
             }
         });
 	
-		 
+		  
 		
 		 
 		

@@ -137,7 +137,7 @@ public class Explore extends JFrame implements ActionListener{
                  new Board(id);
                  jframe.setVisible(false);
              }
-         });
+         }); 
 		// 계정입력
 		JTextField t1 = new JTextField();
 		t1.setBounds(90,25,150,25);

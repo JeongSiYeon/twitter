@@ -278,7 +278,7 @@ public class mainPage extends JFrame implements ActionListener{
 	    		   return false;
 	    	   }
 	       };
-	      
+	       
 	       table.setRowHeight(40);
 	       JScrollPane scroll = new JScrollPane(table);
 	       scroll.setSize(480,300);

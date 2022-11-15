@@ -241,7 +241,7 @@ public class Board extends JFrame implements ActionListener{
 	           scroll.setLocation(50,200);
 		       this.add(scroll);
 		        table1.addMouseListener(new MouseAdapter () { 
-		        	
+		        	 
 			    	   @Override
 			    	   public void mouseClicked(MouseEvent e) {
 			    	   if (e.getButton() == 1) {
