@@ -28,10 +28,7 @@ public class mainPage extends JFrame implements ActionListener{
 	Font font2 = new Font("Aharoni 굵게 ", Font.BOLD, 20);
 	 Font font3 = new Font("Aharoni 굵게",Font.BOLD,12);
 	JOptionPane aa=new JOptionPane();
-	
-	static String url = "jdbc:mysql://localhost/twittwe_db";
-    static String user = "root";
-	static String passwd = "anselmochung24";
+
 	static Statement stmt = null;
 	static ResultSet rs = null;
 	static ResultSet rs2 = null;
@@ -45,7 +42,7 @@ public class mainPage extends JFrame implements ActionListener{
 	    {
 	    	
 	       this.setSize(500,640);
-	       this.setLocation(1000,500);
+	       this.setLocationRelativeTo(null);
 	       this.setTitle("Twitter");
 	       this.setLayout(null);
 	       this.getContentPane().setBackground(b);
@@ -134,33 +131,29 @@ public class mainPage extends JFrame implements ActionListener{
 	        jl.setHorizontalAlignment(JLabel.CENTER);
 
 	        this.add(jl); 
-	        try {
-				Connection con = DriverManager.getConnection(url, user, passwd);
-				try {
-					stmt = con.createStatement();
-                    String s1 = "select name from user where user_id = \'" + id + "\' ";
-                    rs = stmt.executeQuery(s1);
-                    while(rs.next())
-			           {
-                    String name = rs.getString("name");
-                    JLabel un = new JLabel(id); 
-        	        un.setFont(font2);
-        	        un.setSize(100,50);
-        	        un.setLocation(25,150);
-        	        un.setHorizontalAlignment(JLabel.CENTER);
-        	        this.add(un); 
-        	        
-        	        JLabel profile_name = new JLabel("@" + name);
-                    profile_name.setSize(80,25);
-                    profile_name.setLocation(30,190);
-                    profile_name.setFont(font3);
-                    profile_name.setForeground(new Color(128,128,128));
-                    this.add(profile_name);
-        	        
-			           }
-				}catch(SQLException E) {
-					E.printStackTrace();
-				}
+	        
+			try (Connection con = JDBC.connection()) {
+				stmt = con.createStatement();
+			    String s1 = "select name from user where user_id = \'" + id + "\' ";
+			    rs = stmt.executeQuery(s1);
+			    while(rs.next())
+			       {
+			    String name = rs.getString("name");
+			    JLabel un = new JLabel(id); 
+			    un.setFont(font2);
+			    un.setSize(100,50);
+			    un.setLocation(25,150);
+			    un.setHorizontalAlignment(JLabel.CENTER);
+			    this.add(un); 
+			    
+			    JLabel profile_name = new JLabel("@" + name);
+			    profile_name.setSize(80,25);
+			    profile_name.setLocation(30,190);
+			    profile_name.setFont(font3);
+			    profile_name.setForeground(new Color(128,128,128));
+			    this.add(profile_name);
+			  
+			       }
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}
@@ -218,17 +211,13 @@ public class mainPage extends JFrame implements ActionListener{
 	            public void actionPerformed(ActionEvent e)
 	            {
 	            	  String content = jt.getText();
-	            	try {
-						Connection con = DriverManager.getConnection(url, user, passwd);
-						try {
-							stmt = con.createStatement();
-	                        String s1 = "insert into posts (content,writer_id,num_of_likes,date) values (\'" + content + "\' ,\'"+id+"\', default , default )";
-	                        pstm = con.prepareStatement(s1);
-							pstm.executeUpdate();
-							
-						}catch(SQLException E) {
-							E.printStackTrace();
-						}
+	            	
+					try (Connection con = JDBC.connection()){
+						stmt = con.createStatement();
+					    String s1 = "insert into posts (content,writer_id,num_of_likes,date) values (\'" + content + "\' ,\'"+id+"\', default , default )";
+					    pstm = con.prepareStatement(s1);
+						pstm.executeUpdate();
+					
 					}catch(SQLException E) {
 						E.printStackTrace();
 					}
@@ -238,36 +227,32 @@ public class mainPage extends JFrame implements ActionListener{
 	       
 	       String post[] = {"id", "create_time", "post_content"};
 	       String data[][] = new String[100][3];
-	      
-	       try {
-				Connection con = DriverManager.getConnection(url, user, passwd);
+			
+			try (Connection con = JDBC.connection()){
 				
-				try {
-					
-					String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
-					   stmt = con.createStatement();
-			           rs = stmt.executeQuery(s2);
-			           int i = 0;
-			           while(rs.next())
-			           {
-			        String fid = rs.getString("followed_id");
-			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
-					   stmt = con.createStatement();
-			           rs2 = stmt.executeQuery(s3);
+				String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
+				
+				   stmt = con.createStatement();
+		           rs = stmt.executeQuery(s2);
+		           int i = 0;
+		           
+		           while(rs.next())
+		           {
+		        String fid = rs.getString("followed_id");
+		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
+				   stmt = con.createStatement();
+		           rs2 = stmt.executeQuery(s3);
  
-			           while(rs2.next())
-			           {
-			               data[i][0] = rs2.getString("writer_id");
-			               data[i][1] = rs2.getString("date");
-			               data[i][2] = rs2.getString("content");
-			               i++;
-			           }
-			           
-			           }
-					
-				}catch(SQLException E) {
-					E.printStackTrace();
-				}
+		           while(rs2.next())
+		           {
+		               data[i][0] = rs2.getString("writer_id");
+		               data[i][1] = rs2.getString("date");
+		               data[i][2] = rs2.getString("content");
+		               i++;
+		           }
+		           
+		           }
+				
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}
@@ -295,26 +280,22 @@ public class mainPage extends JFrame implements ActionListener{
 	    		   
 	    		   String roid = (String) table.getModel().getValueAt(row,0);
 	    		   var content = table.getModel().getValueAt(row, 2);
-	    		   try {
-	    			   Connection con = DriverManager.getConnection(url, user, passwd);
-	    		   try {
-	    			   int k = 1;
-	    			   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
-	    			   stmt = con.createStatement();
-			           rs = stmt.executeQuery(s3);
-			           
-			           while(rs.next()) {
-			        	   String poid = rs.getString("post_id");
-			        	   new post_page(poid, id, k); //여기에 포스트 페이지  
-			    		   setVisible(false);
-			           }
-			         
-	    		   }catch(SQLException E) {
-	    			   E.printStackTrace();
-	    		   }
-	    		   }catch(SQLException E) {
-	    			   E.printStackTrace();
-	    		   }
+	    		   Connection con = JDBC.connection();
+ 		   try {
+				   int k = 1;
+				   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
+				   stmt = con.createStatement();
+				   rs = stmt.executeQuery(s3);
+				   
+				   while(rs.next()) {
+					   String poid = rs.getString("post_id");
+					   new post_page(poid, id, k); //여기에 포스트 페이지  
+					   setVisible(false);
+				   }
+				 
+ 		   }catch(SQLException E) {
+				   E.printStackTrace();
+ 		   }
 	    		
 	    	   } 
 	    	   }

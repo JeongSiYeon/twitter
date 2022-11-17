@@ -23,7 +23,7 @@ public class SCprofilehome
     {
         JFrame profile = new JFrame();
         profile.setSize(500,350);
-        profile.setLocation(700,300);
+        profile.setLocationRelativeTo(null);
         profile.setTitle("profile");
         profile.setLayout(null);
         Color b=new Color(255,255,255);
@@ -41,19 +41,16 @@ public class SCprofilehome
         profile_image.setBounds(0,0,500,162);
         profile.add(profile_image);
 
-        try
+        try (Connection con = JDBC.connection())
         {
             JOptionPane message = new JOptionPane();
-            String url = "jdbc:mysql://localhost/twittwe_db";
-            String userName = "root";
-        	 String user_password = "anselmochung24";
-            Connection connection = DriverManager.getConnection(url, userName, user_password);
+            
 
             Statement stmt = null;
             ResultSet rs = null;
             PreparedStatement pstm = null;
 
-            stmt = connection.createStatement();
+            stmt = con.createStatement();
 
             String s4 = "select user_id,name,create_at from user where user_id = \'" + ssid + "\'";
             rs = stmt.executeQuery(s4);
@@ -139,6 +136,7 @@ public class SCprofilehome
             follower_text.setForeground(new Color(128,128,128));
             follower_text.setFont(font3);
             profile.add(follower_text);
+
         }
         catch (SQLException e)
         {

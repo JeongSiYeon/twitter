@@ -21,13 +21,10 @@ public class Profile extends JFrame implements ActionListener{//profile home
 	JButton back;
 	
 	public Profile(String eid) throws SQLException {
+		this.setLocationRelativeTo(null);
 		this.getContentPane().setBackground(b);
 		setTitle("follow/following");
 		setSize(400,500);
-		Dimension frameSize = getSize();
-		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((windowSize.width - frameSize.width)/2,
-				(windowSize.height - frameSize.height) / 2);
 		
 		JTabbedPane pane = createTabbedPane(eid); 
 		add(pane, BorderLayout.CENTER);
@@ -120,6 +117,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		Connection con = JDBC.connection();
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
+		con.close();
 		
 		return rs;
 	}

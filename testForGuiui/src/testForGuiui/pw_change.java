@@ -11,7 +11,7 @@ public class pw_change
     {  
         JFrame pw_change = new JFrame();
         pw_change.setSize(400,300);
-        pw_change.setLocation(700,300);
+        pw_change.setLocationRelativeTo(null);
         pw_change.setTitle("회원가입");
         pw_change.setLayout(null);
         Color b=new Color(255,255,255);
@@ -107,41 +107,31 @@ public class pw_change
                 String input_new_pw = new_pw_text.getText();
                 String input_new_pw_check = new_pw_check_text.getText();
 
-                try
-                {
-                    JOptionPane message = new JOptionPane();
-                    String url = "jdbc:mysql://localhost/twittwe_db";
-                    String userName = "root";
-                	 String user_password = "anselmochung24";
-                    Connection connection = DriverManager.getConnection(url, userName, user_password);
+                JOptionPane message = new JOptionPane();
+				
 
-                    Statement stmt = null;
-                    ResultSet rs = null;
-                    PreparedStatement pstm = null;
-                    try
-                    {
-                        if(input_new_pw.equals(input_new_pw_check))
-                        {
-                            String s1 = "update user set password = \'" + input_new_pw + "\' where user_id = \'" + id + "\' ";
-                            pstm = connection.prepareStatement(s1);
-                            pstm.executeUpdate();
-                            message.showMessageDialog(null, "비밀번호 변경완료!");
-                        }
-                        else
-                        {
-                            message.showMessageDialog(null, "비밀번호가 일치하지 않습니다!");
-                        }
-                    }
-                    catch (SQLException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                }
+				Statement stmt = null;
+				ResultSet rs = null;
+				PreparedStatement pstm = null;
+				try (Connection con = JDBC.connection())
+				{
+				    if(input_new_pw.equals(input_new_pw_check))
+				    {
+				        String s1 = "update user set password = \'" + input_new_pw + "\' where user_id = \'" + id + "\' ";
+				        pstm = con.prepareStatement(s1);
+				        pstm.executeUpdate();
+				        message.showMessageDialog(null, "비밀번호 변경완료!");
+				    }
+				    else
+				    {
+				        message.showMessageDialog(null, "비밀번호가 일치하지 않습니다!");
+				    }
+				 
+				}
+				catch (SQLException e)
+				{
+				    e.printStackTrace();
+				}
             }
         });
 

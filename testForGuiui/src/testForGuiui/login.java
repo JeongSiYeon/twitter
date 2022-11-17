@@ -5,11 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-
 
 public class login
 {
@@ -20,7 +15,7 @@ public class login
     {
         JFrame jf = new JFrame();
         jf.setSize(400,450);
-        jf.setLocation(700,300);
+        jf.setLocationRelativeTo(null);
         jf.setTitle("로그인");
         jf.setLayout(null);
         Color b=new Color(255,255,255);
@@ -77,7 +72,7 @@ public class login
         password.setForeground(new Color(128,128,128));
         jf.add(password);
 
-        final JTextField password_text = new JTextField();
+        final JPasswordField password_text = new JPasswordField();
         password_text.setSize(200,30);
         password_text.setLocation(120,360);
         jf.add(password_text);
@@ -120,44 +115,32 @@ public class login
                 String input_id = id_text.getText();
                 String input_password = password_text.getText();
 
-                try
-                {
-                    JOptionPane message = new JOptionPane();
-                     String url = "jdbc:mysql://localhost/twittwe_db";
-                    String userName = "root";
-                	 String user_password = "anselmochung24";
-                    Connection connection = DriverManager.getConnection(url, userName, user_password);
+                JOptionPane message = new JOptionPane();
 
-                    Statement stmt = null;
-                    ResultSet rs = null;
-                    PreparedStatement pstm = null;
-                    try
-                    {
-                        stmt = connection.createStatement();
-                        String s1 = "select user_id from user where user_id = \"" + input_id + "\" and password = \"" +input_password +  "\"";
-                        rs = stmt.executeQuery(s1);
+				Statement stmt = null;
+				ResultSet rs = null;
+				PreparedStatement pstm = null;
+				try (Connection con = JDBC.connection())
+				{
+				    stmt = con.createStatement();
+				    String s1 = "select user_id from user where user_id = \"" + input_id + "\" and password = \"" +input_password +  "\"";
+				    rs = stmt.executeQuery(s1);
 
-                        if(rs.next())
-                        {
-                            message.showMessageDialog(null, "로그인 성공!");
-                            new mainPage(input_id);
-                            jf.setVisible(false);
-                        }
-                        else
-                        {
-                            message.showMessageDialog(null, "잘못된 정보입니다");
-                        }
-                    }
-                    catch (SQLException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                }
+				    if(rs.next())
+				    {
+				        new mainPage(input_id);
+				        jf.setVisible(false);
+				    }
+				    else
+				    {
+				        message.showMessageDialog(null, "잘못된 정보입니다");
+				    }
+				   
+				}
+				catch (SQLException e)
+				{
+				    e.printStackTrace();
+				}
             }
         });
 

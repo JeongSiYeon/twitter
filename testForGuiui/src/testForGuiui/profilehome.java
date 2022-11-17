@@ -23,7 +23,7 @@ public class profilehome
     {
         JFrame profile = new JFrame();
         profile.setSize(505,620);
-        profile.setLocation(700,300);
+        profile.setLocationRelativeTo(null);
         profile.setTitle("profile");
         profile.setLayout(null);
         Color b=new Color(255,255,255);
@@ -34,10 +34,6 @@ public class profilehome
         Font font1 = new Font("Aharoni 굵게",Font.BOLD,22);
         Font font2 = new Font("Aharoni 굵게",Font.BOLD,12);
         Font font3 = new Font("Aharoni 굵게",Font.BOLD,13);
-        
-        String url = "jdbc:mysql://localhost/twittwe_db";
-        String userName = "root";
-    	String user_password = "anselmochung24";
         
     	Statement stmt = null;
         ResultSet rs = null;
@@ -50,14 +46,14 @@ public class profilehome
         profile_image.setBounds(0,0,500,167);
         profile.add(profile_image);
 
-        try
+        try(Connection con = JDBC.connection())
         {
             JOptionPane message = new JOptionPane();
             
-            Connection connection = DriverManager.getConnection(url, userName, user_password);
+            
 
 
-            stmt = connection.createStatement();
+            stmt = con.createStatement();
 
             String s4 = "select user_id,name,create_at from user where user_id = \'" + id + "\'";
             rs = stmt.executeQuery(s4);
@@ -166,6 +162,8 @@ public class profilehome
             todelete.setForeground(new Color(128,128,128));
             todelete.setFont(font3);
             profile.add(todelete);
+            
+ 
         }
         catch (SQLException e)
         {
@@ -213,28 +211,23 @@ public class profilehome
         String post[] = {"id", "create_time", "post_content"};
 	       String data[][] = new String[100][3];
 	      
-	       try {
-				Connection con = DriverManager.getConnection(url, userName, user_password);
+	       
+			
+			try (Connection con = JDBC.connection()){
 				
-				try {
-					
-			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + id + "\'";
-					   stmt = con.createStatement();
-			           rs = stmt.executeQuery(s3);
-			           int i = 0;
-			           while(rs.next())
-			           {
-			               data[i][0] = rs.getString("writer_id");
-			               data[i][1] = rs.getString("date");
-			               data[i][2] = rs.getString("content");
-			               i++;
-			           }
-			           
-			           
-					
-				}catch(SQLException E) {
-					E.printStackTrace();
-				}
+		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + id + "\'";
+				   stmt = con.createStatement();
+		           rs = stmt.executeQuery(s3);
+		           int i = 0;
+		           while(rs.next())
+		           {
+		               data[i][0] = rs.getString("writer_id");
+		               data[i][1] = rs.getString("date");
+		               data[i][2] = rs.getString("content");
+		               i++;
+		           }
+		           
+				
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}
@@ -267,21 +260,18 @@ public class profilehome
 	    		   {
 	    		   String roid = (String) table.getModel().getValueAt(row,0);
 	    		   var content = table.getModel().getValueAt(row, 2);
-	    		   try {
-	    			   Connection con = DriverManager.getConnection(url, userName, user_password);
-	    			   PreparedStatement pstm = null;
-	    		   try {
-	    			  
-	    			   String s3 = "delete from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
-	    			   pstm = con.prepareStatement (s3);
-					   pstm.executeUpdate();
-						message1.showMessageDialog(null, "Deleted!"); 
-	    		   }catch(SQLException E) {
-	    			   E.printStackTrace();
-	    		   }
-	    		   }catch(SQLException E) {
-	    			   E.printStackTrace();
-	    		   }
+	    		   
+				   
+ 		   try (Connection con = JDBC.connection()){
+ 			   		PreparedStatement pstm = null;
+				   String s3 = "delete from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
+				   pstm = con.prepareStatement (s3);
+				   pstm.executeUpdate();
+					message1.showMessageDialog(null, "Deleted!"); 
+					
+ 		   }catch(SQLException E) {
+				   E.printStackTrace();
+ 		   }
 	    		   }
 	    	   } 
 	    	   }

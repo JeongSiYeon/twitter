@@ -13,6 +13,8 @@ public class Explore extends JFrame implements ActionListener{
 	JFrame jframe = new JFrame();
 	JPanel jpanel = new JPanel();
 	
+	
+	
 	// 팔로우 하기
 	JList<String> searchList;
 	DefaultListModel<String> model;
@@ -45,10 +47,11 @@ public class Explore extends JFrame implements ActionListener{
     static PreparedStatement pstm = null;
 
     private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
-    
+
 	Explore(String id) throws SQLException
 	{	 
 		this.getContentPane().setBackground(b);
+		this.setLocationRelativeTo(null);
 		
 		
 		// JList를 제어하기 위해 model객체 생성////////////////////////////////////////////
@@ -71,10 +74,8 @@ public class Explore extends JFrame implements ActionListener{
 							return;
 						}
 					
-						Connection con = JDBC.connection();
-						
 						// 이미 팔로우 한 경우
-						try {
+						try (Connection con = JDBC.connection()){
 							stmt = con.createStatement();
 							String haveFollowed = "select follower_id from following where followed_id =\"" + selectedIdForFollow + "\" and follower_id = \'"+id+"\'" ;
 							rs = stmt.executeQuery(haveFollowed);
@@ -86,21 +87,14 @@ public class Explore extends JFrame implements ActionListener{
 									return;
 								}
 							}
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-								
-						String addFollower = "insert into following(follower_id,followed_id) value(\'"+id+"\', \'" + selectedIdForFollow + "\')"; 
-						try {
+							String addFollower = "insert into following(follower_id,followed_id) value(\'"+id+"\', \'" + selectedIdForFollow + "\')"; 
 							pstm = con.prepareStatement (addFollower);
 							pstm.executeUpdate();
 							message2.showMessageDialog(null, selectedIdForFollow + "님을 팔로우했습니다.");
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} 
-						
+							
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+						}
 					}
 				}					
 			}
@@ -109,17 +103,10 @@ public class Explore extends JFrame implements ActionListener{
 		searchList.setBackground(SystemColor.activeCaption);
 
 		model = (DefaultListModel) searchList.getModel();
-		/////////////////////////////////////
-				
-		
-		
 	
 		jframe.setTitle("Follow more");
 		jframe.setSize(400,500);
-		Dimension frameSize = getSize();
-		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((windowSize.width - frameSize.width)/2,
-					(windowSize.height - frameSize.height) / 2);
+		jframe.setLocationRelativeTo(null);
 		jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		jframe.setVisible(true);
 		
@@ -128,7 +115,7 @@ public class Explore extends JFrame implements ActionListener{
 		jframe.add(tPane1, BorderLayout.CENTER);
 		
 		 back = new JButton("Back");
-         back.setBounds(45,350,100,25);;
+         back.setBounds(45,350,100,25);
          back.addActionListener(new ActionListener()
          {
              @Override
@@ -222,21 +209,6 @@ public class Explore extends JFrame implements ActionListener{
 					e1.printStackTrace();
 				}
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				//JScrollPane scrollPane = new JScrollPane();
-				//scrollPane.setViewportView(searchList);   
-				//scrollPane.setBounds(50,50,300,300);      
-				
-				//pannelForAccount.add(scrollPane);
-				
 			}
 		});
 	}
@@ -246,7 +218,8 @@ public class Explore extends JFrame implements ActionListener{
 		Connection con = JDBC.connection();
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
-			
+		con.close();
+	
 		return rs;
 	}
 	
