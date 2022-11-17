@@ -229,8 +229,8 @@ public class mainPage extends JFrame implements ActionListener{
 						}catch(SQLException E) {
 							E.printStackTrace();
 						}
-					}catch(SQLException E) {
-						E.printStackTrace();
+						}catch(SQLException E) {
+							E.printStackTrace();
 					}
 	            	aa.showMessageDialog(null, "Uploaded!"); 
 	            }
@@ -251,7 +251,7 @@ public class mainPage extends JFrame implements ActionListener{
 			           while(rs.next())
 			           {
 			        String fid = rs.getString("followed_id");
-			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
+			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\'";
 					   stmt = con.createStatement();
 			           rs2 = stmt.executeQuery(s3);
  

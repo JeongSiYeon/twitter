@@ -257,10 +257,25 @@ public class profilehome
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
 	    	   if (e.getButton() == 1) {
+	    		   
 	    		   JOptionPane message1;
 	    		   message1 = new JOptionPane();
 	    		   int row = table.getSelectedRow();
 	    		   int col = table.getSelectedColumn();
+	    		   
+	    		   if(table.getModel().getValueAt(row,0) == null)
+	    		   {
+	    			   message1.showMessageDialog(null, "nothing to delete!");
+	    			   try {
+						new profilehome(id);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+						profile.setVisible(false);
+	    		   }
+	    		   else
+	    		   {
 	    		   int allow = message1.showConfirmDialog(null, "Sure to delete?", "Yes/No", JOptionPane.YES_NO_CANCEL_OPTION);
 	    		   
 	    		   if(allow == 0)
@@ -276,11 +291,14 @@ public class profilehome
 	    			   pstm = con.prepareStatement (s3);
 					   pstm.executeUpdate();
 						message1.showMessageDialog(null, "Deleted!"); 
+						new profilehome(id);
+						profile.setVisible(false);
 	    		   }catch(SQLException E) {
 	    			   E.printStackTrace();
 	    		   }
 	    		   }catch(SQLException E) {
 	    			   E.printStackTrace();
+	    		   }
 	    		   }
 	    		   }
 	    	   } 
