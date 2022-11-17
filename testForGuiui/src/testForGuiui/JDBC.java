@@ -7,9 +7,9 @@ public class JDBC {
 	
 	public static Connection connection() {	
 		try {
-			final String url = "jdbc:mysql://localhost/twitter";
+			final String url = "jdbc:mysql://localhost/twitter_db";
 		    final String user = "root";
-			final String passwd = "yeoningi1004!";
+			final String passwd = "anselmochung24";
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			

@@ -268,6 +268,8 @@ public class profilehome
 				   pstm = con.prepareStatement (s3);
 				   pstm.executeUpdate();
 					message1.showMessageDialog(null, "Deleted!"); 
+					new profilehome(id);
+					profile.setVisible(false);
 					
  		   }catch(SQLException E) {
 				   E.printStackTrace();

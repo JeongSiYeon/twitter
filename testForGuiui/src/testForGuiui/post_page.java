@@ -58,13 +58,13 @@ public class post_page
 
 		    stmt = con.createStatement();
 
-		    String s4 = "select count(l_p_id) from post_like where post_id = " + post_idx + "";
+		    String s4 = "select count(*) from post_like where post_id = " + post_idx + "";
 		    rs = stmt.executeQuery(s4);
 		    String count_like = "";
 
 		    while(rs.next())
 		    {
-		        count_like = rs.getString("count(l_p_id)");
+		        count_like = rs.getString("count(*)");
 		    }
 
 		    JLabel count_like_num = new JLabel(count_like);
@@ -293,7 +293,7 @@ public class post_page
 							String s1 = "insert into child_comment (writer_id,comment_id,content) " +
 	                                " values ( \'" + comment_id + "\', \'" + writer_id + "\',message2)";
 							System.out.println(s1);
-	                        try {
+	                        try (Connection con = JDBC.connection()){
 								pstm = con.prepareStatement(s1);
 								pstm.executeUpdate();
 							} catch (SQLException e1) {
@@ -310,7 +310,7 @@ public class post_page
 		            {
 		            	JOptionPane message = new JOptionPane();
 		                String ci = (String) comment_table.getModel().getValueAt(comment_table.getSelectedRow(),0);
-		                try
+		                try (Connection con = JDBC.connection())
 		                {
 		                    stmt = con.createStatement();
 		                    String s2 = "select liker_id from comment_like where comment_id = \'" + ci + "\' and liker_id = \'" + user_id + "\' ";
@@ -375,7 +375,7 @@ public class post_page
 		        public void actionPerformed(ActionEvent e)
 		        {
 		            PreparedStatement pstm = null;
-		            try
+		            try (Connection con = JDBC.connection())
 		            {
 		                String comment_text = new_comment.getText();
 
@@ -405,7 +405,7 @@ public class post_page
 		            PreparedStatement pstm = null;
 		            Statement stmt = null;
 		            ResultSet rs = null;
-		            try
+		            try (Connection con = JDBC.connection())
 		            {
 		                stmt = con.createStatement();
 		                String s2 = "select liker_id from post_like where post_id = \'" + post_idx + "\' and liker_id = \'" + user_id + "\' ";

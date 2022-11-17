@@ -128,6 +128,7 @@ public class login
 
 				    if(rs.next())
 				    {
+				    	message.showMessageDialog(null, "로그인 성공 ");
 				        new mainPage(input_id);
 				        jf.setVisible(false);
 				    }

@@ -214,7 +214,7 @@ public class mainPage extends JFrame implements ActionListener{
 	            	
 					try (Connection con = JDBC.connection()){
 						stmt = con.createStatement();
-					    String s1 = "insert into posts (content,writer_id,num_of_likes,date) values (\'" + content + "\' ,\'"+id+"\', default , default )";
+					    String s1 = "insert into posts (content,writer_id,date) values (\'" + content + "\' ,\'"+id+"\', default )";
 					    pstm = con.prepareStatement(s1);
 						pstm.executeUpdate();
 					
@@ -222,6 +222,8 @@ public class mainPage extends JFrame implements ActionListener{
 						E.printStackTrace();
 					}
 	            	aa.showMessageDialog(null, "Uploaded!"); 
+	            	new mainPage(id);
+	            	setVisible(false);
 	            }
 	        });
 	       
@@ -234,25 +236,33 @@ public class mainPage extends JFrame implements ActionListener{
 				
 				   stmt = con.createStatement();
 		           rs = stmt.executeQuery(s2);
-		           int i = 0;
+		           
 		           
 		           while(rs.next())
 		           {
 		        String fid = rs.getString("followed_id");
-		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
+		        String cnt= "select count(*) from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\' ";
+			    rs = stmt.executeQuery(cnt);
+			    
+			    while(rs.next())
+			    {
+			    	String cnt2 = rs.getString("count(*)");
+			    	int num = Integer.parseInt(cnt2);
+			    	int i = num - 1;
+		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\' ";
 				   stmt = con.createStatement();
 		           rs2 = stmt.executeQuery(s3);
- 
+		           
 		           while(rs2.next())
 		           {
 		               data[i][0] = rs2.getString("writer_id");
 		               data[i][1] = rs2.getString("date");
 		               data[i][2] = rs2.getString("content");
-		               i++;
+		               i--;
 		           }
 		           
 		           }
-				
+		           }
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}

@@ -199,25 +199,33 @@ public class Board extends JFrame implements ActionListener{
 					    i++;
 					    
 					    optionPane.showMessageDialog(null, "Found!"); 
-				
+					    String cnt= "select count(*) from posts where writer_id = \'" + sid + "\' ";
+					    rs = stmt.executeQuery(cnt);
+					    
+					    while(rs.next())
+					    {
+					    String num = rs.getString("count(*)");
 					    String s3 = "select writer_id, date, content from posts where writer_id = \'" + sid + "\'";
 					    stmt = con.createStatement();
 					    rs = stmt.executeQuery(s3);
-					          
-					    int k = 0;
+					    
+					    	int n = Integer.parseInt(num);
+					    	int k = n-1;
+					
 					    while(rs.next()) {  //사용자 검색 게시글 출력 테이블  
 					    	data[k][0] = rs.getString("writer_id");
 					        data[k][1] = rs.getString("date");
 					        data[k][2] = rs.getString("content");
-					        k++;
+					        k--;
 					    }
 					        
-					    for(int j = k; j < 100; j++) {
+					    for(int j = n; j < 100; j++) {
 					    	for(int p = 0; p < 3; p++) {
 					    		data[j][p] = " ";
 					        }
 					    }
 					} 
+					}
 				} catch(SQLException E) {
 						E.printStackTrace(); 
 				}

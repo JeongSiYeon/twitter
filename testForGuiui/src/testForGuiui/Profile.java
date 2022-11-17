@@ -20,6 +20,9 @@ public class Profile extends JFrame implements ActionListener{//profile home
 	Color b = new Color(204,229,255);
 	JButton back;
 	
+	static Statement stmt = null;
+	static ResultSet rs = null;
+	
 	public Profile(String eid) throws SQLException {
 		this.setLocationRelativeTo(null);
 		this.getContentPane().setBackground(b);
@@ -73,13 +76,19 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		
 		JTextArea resultArea = new JTextArea();
 		resultArea.setEnabled(false);
-		rs = getResult(query);
 		
-		// put result
-		while(rs.next()) {
-			String result = rs.getString(1) + "\n\n";
-			resultArea.append(result);
+		try (Connection con = JDBC.connection()) {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
 			
+			// put result
+			while(rs.next()) {
+				String result = rs.getString(1) + "\n\n";
+				resultArea.append(result);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -110,16 +119,6 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		t.add("Follower", pannelForFollower);
 		
 		return t;
-	}
-	
-	// get query(select) ResultSet
-	private ResultSet getResult(String query) throws SQLException {
-		Connection con = JDBC.connection();
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-		con.close();
-		
-		return rs;
 	}
 	
 	 @Override

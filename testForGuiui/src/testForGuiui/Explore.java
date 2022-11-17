@@ -147,14 +147,18 @@ public class Explore extends JFrame implements ActionListener{
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(50,50,300,300);   
 		
-		//JTextArea resultArea = new JTextArea();
-		rs = getResult(getAccount);
+		try (Connection con = JDBC.connection()) {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(getAccount);
 		
-		// put result
-		while(rs.next()) {
-			String result = rs.getString(1) + "\n\n";
-			model.addElement(result);
+			// put result
+			while(rs.next()) {
+				String result = rs.getString(1) + "\n\n";
+				model.addElement(result);
 			
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		scrollPane.setViewportView(searchList);    // 데이터가 아래로 내려갈 경우 아래로 자동으로 내려감
@@ -182,24 +186,20 @@ public class Explore extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String input_id = t1.getText();
+				System.out.println("input_id: " + input_id);
 				
 				String getSearchResult = "select user_id from user where user_id LIKE " + "\"%" + input_id + "%\"";
 				System.out.println("getSearchResule: " + getSearchResult);
 				
 				ArrayList searchStr = new ArrayList<>();
 				
-				try {
-					rs = getResult(getSearchResult);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				try (Connection con = JDBC.connection()){
+					stmt = con.createStatement();
+					rs = stmt.executeQuery(getSearchResult);
+	
+					// 원래 JList에 있던 것 clear
+					model.removeAllElements();
 				
-				// put result
-				
-				// 원래 JList에 있던 것 clear
-				model.removeAllElements();
-				try {
 					while(rs.next()) {
 						String result = rs.getString(1) + "\n";
 						System.out.println(result);
@@ -207,21 +207,11 @@ public class Explore extends JFrame implements ActionListener{
 					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
-				}
-				
+				}	
 			}
 		});
 	}
-	
-	// get query(select) ResultSet
-	private ResultSet getResult(String query) throws SQLException {
-		Connection con = JDBC.connection();
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-		con.close();
-	
-		return rs;
-	}
+
 	
 	
 	private JPanel CreateScrollPanel(String query) throws SQLException {	
@@ -231,13 +221,20 @@ public class Explore extends JFrame implements ActionListener{
 		panel.setLayout(null);
 		
 		JTextArea resultArea = new JTextArea();
-		rs = getResult(query);
+		
+		try(Connection con = JDBC.connection()) {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+		
 		
 		// put result
 		while(rs.next()) {
 			String result = rs.getString(1) + "\n\n";
 			resultArea.append(result);
 			
+		}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -253,12 +250,17 @@ public class Explore extends JFrame implements ActionListener{
 		String result = null;
 		JLabel label = new JLabel();
 		
-		ResultSet rs = null;		
-		rs = getResult(query);
+		try(Connection con = JDBC.connection()) {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			rs.next();
+			result = rs.getString(1) + rs.getString(3) + rs.getString(6);
+			label.setText(result);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
-		rs.next();
-		result = rs.getString(1) + rs.getString(3) + rs.getString(6);
-		label.setText(result);
+		
 		
 		return label;
 	}
