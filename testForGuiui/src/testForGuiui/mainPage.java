@@ -211,21 +211,6 @@ public class mainPage extends JFrame implements ActionListener{
 	            public void actionPerformed(ActionEvent e)
 	            {
 	            	  String content = jt.getText();
-<<<<<<< HEAD
-	            	try {
-						Connection con = DriverManager.getConnection(url, user, passwd);
-						try {
-							stmt = con.createStatement();
-	                        String s1 = "insert into posts (content,writer_id,num_of_likes,date) values (\'" + content + "\' ,\'"+id+"\', default , default )";
-	                        pstm = con.prepareStatement(s1);
-							pstm.executeUpdate();
-							
-						}catch(SQLException E) {
-							E.printStackTrace();
-						}
-						}catch(SQLException E) {
-							E.printStackTrace();
-=======
 	            	
 					try (Connection con = JDBC.connection()){
 						stmt = con.createStatement();
@@ -235,7 +220,6 @@ public class mainPage extends JFrame implements ActionListener{
 					
 					}catch(SQLException E) {
 						E.printStackTrace();
->>>>>>> branch 'master' of https://github.com/JeongSiYeon/twitter.git
 					}
 	            	aa.showMessageDialog(null, "Uploaded!"); 
 	            }
@@ -246,20 +230,6 @@ public class mainPage extends JFrame implements ActionListener{
 			
 			try (Connection con = JDBC.connection()){
 				
-<<<<<<< HEAD
-				try {
-					
-					String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
-					   stmt = con.createStatement();
-			           rs = stmt.executeQuery(s2);
-			           int i = 0;
-			           while(rs.next())
-			           {
-			        String fid = rs.getString("followed_id");
-			        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\'";
-					   stmt = con.createStatement();
-			           rs2 = stmt.executeQuery(s3);
-=======
 				String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
 				
 				   stmt = con.createStatement();
@@ -272,7 +242,6 @@ public class mainPage extends JFrame implements ActionListener{
 		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\'";
 				   stmt = con.createStatement();
 		           rs2 = stmt.executeQuery(s3);
->>>>>>> branch 'master' of https://github.com/JeongSiYeon/twitter.git
  
 		           while(rs2.next())
 		           {
