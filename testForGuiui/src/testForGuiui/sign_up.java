@@ -11,7 +11,7 @@ public class sign_up
     {
         JFrame signup = new JFrame();
         signup.setSize(400,470);
-        signup.setLocation(700,300);
+        signup.setLocationRelativeTo(null);
         signup.setTitle("회원가입");
         signup.setLayout(null);
         Color b=new Color(255,255,255);
@@ -127,37 +127,28 @@ public class sign_up
                 String input_phonenumber = ph_text.getText();
                 String input_email = email_text.getText();
 
-                try
-                {
-                    JOptionPane message = new JOptionPane();
-                    String url = "jdbc:mysql://localhost/twittwe_db";
-                    String userName = "root";
-                	 String user_password = "anselmochung24";
-                    Connection connection = DriverManager.getConnection(url, userName, user_password);
+                JOptionPane message = new JOptionPane();
+				
 
-                    Statement stmt = null;
-                    ResultSet rs = null;
-                    PreparedStatement pstm = null;
-                    try
-                    {
-                        stmt = connection.createStatement();
-                        String s1 = "insert into user values ( \'" + input_id + "\', \'" + input_password + "\', \'" + input_name + "\', \'"
-                                + input_phonenumber + "\', \'" + input_email + "\','',default)";
-                        pstm = connection.prepareStatement(s1);
-                        pstm.executeUpdate();
-                    }
-                    catch (SQLException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    message.showMessageDialog(null, "회원가입 완료!");
-                    signup.setVisible(false);
-                    new login();
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                }
+				Statement stmt = null;
+				ResultSet rs = null;
+				PreparedStatement pstm = null;
+				try(Connection con = JDBC.connection())
+				{
+				    stmt = con.createStatement();
+				    String s1 = "insert into user values ( \'" + input_id + "\', \'" + input_password + "\', \'" + input_name + "\', \'"
+				            + input_phonenumber + "\', \'" + input_email + "\','',default)";
+				    pstm = con.prepareStatement(s1);
+				    pstm.executeUpdate();
+				
+				}
+				catch (SQLException e)
+				{
+				    e.printStackTrace();
+				}
+				message.showMessageDialog(null, "회원가입 완료!");
+				signup.setVisible(false);
+				new login();
             }
         });
 
