@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.*;
 
 
@@ -16,7 +19,7 @@ public class login
         JFrame jf = new JFrame();
         jf.setSize(400,450);
         jf.setLocationRelativeTo(null);
-        jf.setTitle("로그인");
+        jf.setTitle("login");
         jf.setLayout(null);
         Color b=new Color(255,255,255);
         Color c = new Color(0,172,238);
@@ -96,6 +99,24 @@ public class login
         jf.add(signup);
 
         jf.setVisible(true);
+        
+        JLabel find_password = new JLabel("Forgot Password ");
+        find_password.setSize(120,30);
+        find_password.setLocation(260,190);
+        find_password.setForeground(new Color(128,128,128));
+        jf.add(find_password);
+        
+        find_password.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+                if (e.getButton() == 1)
+                {
+                	jf.setVisible(false);
+                    new Find_pw();
+                }
+            }
+        });
 
         signup.addActionListener(new ActionListener()
         {
@@ -128,13 +149,12 @@ public class login
 
 				    if(rs.next())
 				    {
-				    	message.showMessageDialog(null, "로그인 성공 ");
 				        new mainPage(input_id);
 				        jf.setVisible(false);
 				    }
 				    else
 				    {
-				        message.showMessageDialog(null, "잘못된 정보입니다");
+				        message.showMessageDialog(null, "Invalid login information!");
 				    }
 				   
 				}

@@ -172,11 +172,21 @@ public class post_page
 		    changeImg = prof_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
 			ImageIcon prof_icon = new ImageIcon(changeImg);
 			
-			changeImg = thumbUp_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
+			changeImg = thumbUp_img.getScaledInstance(14, 17, Image.SCALE_SMOOTH);
 			ImageIcon thumbUp_icon = new ImageIcon(changeImg);
 			
-			changeImg = speechBubble_img.getScaledInstance(15, 17, Image.SCALE_SMOOTH);
+			changeImg = speechBubble_img.getScaledInstance(13, 16, Image.SCALE_SMOOTH);
 			ImageIcon speechBubble_icon = new ImageIcon(changeImg);
+			
+			// 널 포인터 오류 해결
+			contents[0][0] = "";
+	        contents[0][1] = "";
+	        contents[0][2] = "";
+	        contents[0][3] = "";
+	        contents[0][4] = "";
+	        contents[0][5] = "";
+	        contents[0][6] = "";
+	        contents[0][7] = "";
 			
 			// 댓글인 경우 - 대댓글인 경우 따로 처리 //////////////////////////////////////
 		    while(rs.next())
@@ -215,13 +225,13 @@ public class post_page
 
 		    for(int j = 0; j < i; j=j+3)
 		    {
-		        String s6 = "select count(l_c_id) from comment_like where comment_id = " + comment_idx[j] + "";
+		        String s6 = "select count(*) from comment_like where comment_id = " + comment_idx[j] + "";
 		        rs = stmt.executeQuery(s6);
 
 		        while(rs.next())
 		        {
 		        	contents[j][0] = comment_idx[j];
-		            contents[j][7] = rs.getString("count(l_c_id)");
+		            contents[j][7] = rs.getString("count(*)");
 		        }
 		    }
 		    ///////////////////////////////////////////////////////////
@@ -379,8 +389,8 @@ public class post_page
 		            {
 		                String comment_text = new_comment.getText();
 
-		                String s1 = "insert into comment (writer_id,post_id,content,num_of_likes,child_comment_id,date) " +
-		                        " values ( \'" + user_id + "\', \'" + post_idx + "\', \'" + comment_text + "\',0,0,default)";
+		                String s1 = "insert into comment (writer_id,post_id,content,date) " +
+	                              " values ( \'" + user_id + "\', \'" + post_idx + "\', \'" + comment_text + "\',default)";
 		                pstm = con.prepareStatement(s1);
 		                pstm.executeUpdate();
 		                

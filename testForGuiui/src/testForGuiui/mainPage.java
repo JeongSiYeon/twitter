@@ -30,8 +30,11 @@ public class mainPage extends JFrame implements ActionListener{
 	JOptionPane aa=new JOptionPane();
 
 	static Statement stmt = null;
+	static Statement stmt2 = null;
+	static Statement stmt3 = null;
 	static ResultSet rs = null;
 	static ResultSet rs2 = null;
+	static ResultSet rs3 = null;
     static PreparedStatement pstm = null;	
 	
 	
@@ -229,40 +232,23 @@ public class mainPage extends JFrame implements ActionListener{
 	       
 	       String post[] = {"id", "create_time", "post_content"};
 	       String data[][] = new String[100][3];
-			
+	       int i = 0;
 			try (Connection con = JDBC.connection()){
 				
-				String s2 = "select followed_id from following where follower_id = \'" + id + "\'";
-				
-				   stmt = con.createStatement();
-		           rs = stmt.executeQuery(s2);
-		           
+					
+		           String s3 = "select writer_id, date, content from posts where writer_id = any(select followed_id from following where follower_id = \'" + id + "\') order by post_id desc";
+		           stmt = con.createStatement();
+		           rs = stmt.executeQuery(s3);
 		           
 		           while(rs.next())
 		           {
-		        String fid = rs.getString("followed_id");
-		        String cnt= "select count(*) from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\' ";
-			    rs = stmt.executeQuery(cnt);
-			    
-			    while(rs.next())
-			    {
-			    	String cnt2 = rs.getString("count(*)");
-			    	int num = Integer.parseInt(cnt2);
-			    	int i = num - 1;
-		        String s3 = "select writer_id, date, content from posts where writer_id = \'" + fid + "\' or writer_id = \'" + id + "\' ";
-				   stmt = con.createStatement();
-		           rs2 = stmt.executeQuery(s3);
-		           
-		           while(rs2.next())
-		           {
-		               data[i][0] = rs2.getString("writer_id");
-		               data[i][1] = rs2.getString("date");
-		               data[i][2] = rs2.getString("content");
-		               i--;
+		               data[i][0] = rs.getString("writer_id");
+		               data[i][1] = rs.getString("date");
+		               data[i][2] = rs.getString("content");
+		               i++;
 		           }
 		           
-		           }
-		           }
+		           
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}

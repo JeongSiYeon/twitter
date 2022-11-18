@@ -54,7 +54,7 @@ public class sign_up
         password.setForeground(new Color(128,128,128));
         signup.add(password);
 
-        JTextField password_text = new JTextField();
+        JPasswordField password_text = new JPasswordField();
         password_text.setSize(150,30);
         password_text.setLocation(120,140);
 
@@ -146,7 +146,7 @@ public class sign_up
 				{
 				    e.printStackTrace();
 				}
-				message.showMessageDialog(null, "회원가입 완료!");
+				message.showMessageDialog(null, "registration completed!");
 				signup.setVisible(false);
 				new login();
             }

@@ -12,7 +12,7 @@ public class pw_change
         JFrame pw_change = new JFrame();
         pw_change.setSize(400,300);
         pw_change.setLocationRelativeTo(null);
-        pw_change.setTitle("회원가입");
+        pw_change.setTitle("pw_change");
         pw_change.setLayout(null);
         Color b=new Color(255,255,255);
         pw_change.getContentPane().setBackground(b);
@@ -46,7 +46,7 @@ public class pw_change
 
         pw_change.add(new_pw);
 
-        JTextField new_pw_text = new JTextField();
+        JPasswordField new_pw_text = new JPasswordField();
         new_pw_text.setSize(150,30);
         new_pw_text.setLocation(170,90);
 
@@ -54,14 +54,14 @@ public class pw_change
 
         JLabel new_pw_check = new JLabel("Confirm new password : ");
         new_pw_check.setSize(170,30);
-        new_pw_check.setLocation(7,130);
+        new_pw_check.setLocation(22,130);
         new_pw_check.setForeground(new Color(128,128,128));
         new_pw_check.setFont(font2);
         new_pw_check.setHorizontalAlignment(JLabel.LEFT);
 
         pw_change.add(new_pw_check);
 
-        JTextField new_pw_check_text = new JTextField();
+        JPasswordField new_pw_check_text = new JPasswordField();
         new_pw_check_text.setSize(150,30);
         new_pw_check_text.setLocation(170,130);
 
@@ -120,11 +120,11 @@ public class pw_change
 				        String s1 = "update user set password = \'" + input_new_pw + "\' where user_id = \'" + id + "\' ";
 				        pstm = con.prepareStatement(s1);
 				        pstm.executeUpdate();
-				        message.showMessageDialog(null, "비밀번호 변경완료!");
+				        message.showMessageDialog(null, "Password change complete!");
 				    }
 				    else
 				    {
-				        message.showMessageDialog(null, "비밀번호가 일치하지 않습니다!");
+				        message.showMessageDialog(null, "Password doesn't match!");
 				    }
 				 
 				}

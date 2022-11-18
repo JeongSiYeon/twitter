@@ -307,7 +307,7 @@ public class Board extends JFrame implements ActionListener{
 	       
 	       
 	       	Explore = new JButton("Follow more");  
-	       	Explore.setSize(150,35);
+	       	Explore.setSize(130,30);
 	       	Explore.setLocation(50,510);
 	       	Explore.setFont(font1);
 	       	Explore.setForeground(new Color(0,172,238));
