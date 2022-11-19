@@ -11,13 +11,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.*;
 
+
+
 public class post_page
 {
 	private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
 	private Image img2=new ImageIcon(mainPage.class.getResource("../image/like.png")).getImage();
+	private Image white_img = new ImageIcon(mainPage.class.getResource("../image/white.png")).getImage();
+	private Image gray_img = new ImageIcon(mainPage.class.getResource("../image/gray.png")).getImage();
+	private Image reply_img = new ImageIcon(mainPage.class.getResource("../image/reply_arrow.png")).getImage();
 	private Image prof_img = new ImageIcon(mainPage.class.getResource("../image/profile1.png")).getImage();
 	private Image thumbUp_img = new ImageIcon(mainPage.class.getResource("../image/thumbUp.png")).getImage();
 	private Image speechBubble_img = new ImageIcon(mainPage.class.getResource("../image/speechBubble.png")).getImage();
+	
+	
+	
 
     public post_page(String post_idx,String user_id, int k)
     {
@@ -43,7 +51,11 @@ public class post_page
 		Font font3 = new Font("Aharoni 굵게",Font.BOLD,13);
 
 		Statement stmt = null;
+		Statement stmt2 = null;
+		Statement stmt3 = null;
 		ResultSet rs = null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
 		PreparedStatement pstm = null;
 
 		try(Connection con = JDBC.connection())
@@ -154,21 +166,16 @@ public class post_page
 		    postT_text.setFont(font3);
 		    postT_text.setEnabled(false);
 		    post_page.add(postT_text);
-
-		    String header [] = {"Comment#", "Img1", "Img2", "Content", "Child_Comment", "Child_Comment#", "ThumbUp", "like#"};
 		    
-		    // 첫 번째 열에 prof_img추가하여 String->Object로 변경
-		    Object contents[][] = new Object[100][8];
-
-		    String comment_idx[] = new String[100];
-
-		    String s3 = "select writer_id,content,date,comment_id from comment where post_id = " + post_idx + "";
-
-		    rs = stmt.executeQuery(s3);
+		    changeImg = white_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
+			ImageIcon white_icon = new ImageIcon(changeImg);
+			
+			changeImg = gray_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
+			ImageIcon gray_icon = new ImageIcon(changeImg);
 		    
+		    changeImg = reply_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
+			ImageIcon reply_icon = new ImageIcon(changeImg);
 		    
-		    int i = 0;
-		 
 		    changeImg = prof_img.getScaledInstance(18, 20, Image.SCALE_SMOOTH);
 			ImageIcon prof_icon = new ImageIcon(changeImg);
 			
@@ -177,27 +184,49 @@ public class post_page
 			
 			changeImg = speechBubble_img.getScaledInstance(13, 16, Image.SCALE_SMOOTH);
 			ImageIcon speechBubble_icon = new ImageIcon(changeImg);
-			
+
+		    String header [] = {"Comment#", "Img1", "Img2", "Content", "Child_Comment", "Child_Comment#", "ThumbUp", "like#"};
+		    
+		    // 첫 번째 열에 prof_img추가하여 String->Object로 변경
+		    Object contents[][] = new Object[100][8];
+
+		    String comment_idx = null;
+
+		    String s3 = "select writer_id,content,date,comment_id from comment where post_id = " + post_idx + " and parent_id is null";
+		    rs = stmt.executeQuery(s3);
+		    
+
 			// 널 포인터 오류 해결
-			contents[0][0] = "";
-	        contents[0][1] = "";
-	        contents[0][2] = "";
-	        contents[0][3] = "";
-	        contents[0][4] = "";
-	        contents[0][5] = "";
-	        contents[0][6] = "";
-	        contents[0][7] = "";
+			for(int c = 0; c <= 7; c++)
+				contents[0][c] = "";
 			
+			 
 			// 댓글인 경우 - 대댓글인 경우 따로 처리 //////////////////////////////////////
+			int i = 0, cc = 0;
 		    while(rs.next())
 		    {
-		    	// 첫 번재 열에 사용자 prof_img추가
-		    	comment_idx[i] = rs.getString("comment_id");
+		    	i = cc;
+		    	comment_idx = rs.getString("comment_id");
+		    	System.out.println("current_comment_idx" + comment_idx);
+		    	
+		        stmt2 = con.createStatement();
+		    	String s6 = "select count(*) from comment_like where comment_id = " + comment_idx + "";
+		        rs2 = stmt2.executeQuery(s6);
+		        
+		        rs2.next();
+		        contents[i][0] = comment_idx;
+		        contents[i][7] = rs2.getString("count(*)"); 
+		        
+		        stmt2 = con.createStatement();
+		        String s7 = "select count(*) from comment where parent_id = " + comment_idx;
+		        rs2 = stmt2.executeQuery(s7);
+		        rs2.next();
+		    	
 		    	contents[i][1] = prof_icon;
-		    	contents[i][2] = "";
+		    	contents[i][2] = white_icon;
 		        contents[i][3] = rs.getString("writer_id");
 		        contents[i][4] = speechBubble_icon;
-		        contents[i][5] = "";
+		        contents[i][5] = rs2.getString("count(*)");
 		        contents[i][6] = thumbUp_icon;
 
 		        i++;
@@ -221,22 +250,60 @@ public class post_page
 		        contents[i][7] = "";
 		        i++;
 		        
+		        // 대댓글 확인
+		        stmt2 = con.createStatement();
+		        System.out.println("대댓글 post_idx: " + post_idx + "parent_idx" + comment_idx);
+		        String s8 = "select comment_id, writer_id,content,date from comment where post_id = " + post_idx + " and parent_id = " + comment_idx;
+		        rs2 = stmt2.executeQuery(s8);
+		        
+		        cc = i;
+
+		        while(rs2.next()) {
+		        	
+		        	String child_comment_idx = rs2.getString("comment_id");
+		        	System.out.println("child comment idx: " + child_comment_idx);
+		        	// like어떻게 할건지?
+		        	stmt3 = con.createStatement();
+		        	String s9 = "select count(*) from comment_like where comment_id = " + child_comment_idx + "";
+		        	rs3 = stmt3.executeQuery(s9);
+		        
+		        	rs3.next();
+		        	contents[cc][0] = child_comment_idx;
+		        	contents[cc][7] = rs3.getString("count(*)"); 
+		        
+		    	
+		        	contents[cc][1] = reply_icon;
+		        	contents[cc][2] = prof_icon;
+		        	contents[cc][3] = "   " + rs2.getString("writer_id");
+		        	contents[cc][4] = gray_icon;
+		        	contents[cc][5] = "";
+		        	contents[cc][6] = thumbUp_icon;
+
+		        	cc++;
+		        	contents[cc][0] = child_comment_idx;
+		        	contents[cc][1] = "";
+		        	contents[cc][2] = "";
+		        	contents[cc][3] = "   " + rs2.getString("content");
+		        	contents[cc][4] = gray_icon;
+		        	contents[cc][5] = "";
+		        	contents[cc][6] = gray_icon;
+		        	contents[cc][7] = "";
+		 
+		        	cc++;
+		        	contents[cc][0] = child_comment_idx;
+		        	contents[cc][1] = "";
+		        	contents[cc][2] = "";
+		        	contents[cc][3] = "   " + rs2.getString("date");
+		        	contents[cc][4] = gray_icon;
+		        	contents[cc][5] = "";
+		        	contents[cc][6] = gray_icon;
+		        	contents[cc][7] = "";
+		        	cc++;
+		    }
+		        
 		    }
 
-		    for(int j = 0; j < i; j=j+3)
-		    {
-		        String s6 = "select count(*) from comment_like where comment_id = " + comment_idx[j] + "";
-		        rs = stmt.executeQuery(s6);
-
-		        while(rs.next())
-		        {
-		        	contents[j][0] = comment_idx[j];
-		            contents[j][7] = rs.getString("count(*)");
-		        }
-		    }
-		    ///////////////////////////////////////////////////////////
-
-		    
+	    
 		    DefaultTableModel dtmCommnetTable = new DefaultTableModel(contents, header) {
 		    	// table 아이템 변경 막기
 	              @Override
@@ -244,7 +311,6 @@ public class post_page
 	                   return false;
 	              }
 		    };
-		    
 		    
 		    
 		    // 입력된 클래스가 그대로 Cell(Column)에  표현되도록 method를 Override해야 함
@@ -256,8 +322,12 @@ public class post_page
 		        }
 	          };
 	  		
-	        //comment_table.getColumn("Img").setCellRenderer(celAlignLeft);
-	        comment_table.getColumn("Comment#").setPreferredWidth(3);
+	        
+	        // comemnt_idx 안보이게
+	        comment_table.getColumn("Comment#").setWidth(0);
+	        comment_table.getColumn("Comment#").setMinWidth(0);
+	        comment_table.getColumn("Comment#").setMaxWidth(0);
+	        
 	        comment_table.getColumn("Img1").setPreferredWidth(1);  
 	        comment_table.getColumn("Img2").setPreferredWidth(1); 
 	        comment_table.getColumn("Content").setPreferredWidth(350); 
@@ -278,6 +348,9 @@ public class post_page
 		    // header 제거
 		    comment_table.setTableHeader(null);
 		    
+			MyRenderer myRenderer = new MyRenderer();
+			comment_table.setDefaultRenderer(Object.class, myRenderer);
+			
 		    post_page.add(scrollpane);
 		    
 		    comment_table.addMouseListener(new MouseAdapter()
@@ -296,16 +369,22 @@ public class post_page
 						int isChildComment = message.showConfirmDialog(null, "대댓글을 작성 하시겠습니까?", "Reply", JOptionPane.YES_NO_CANCEL_OPTION);
 						if(isChildComment == 0) {
 							// 예 버튼 클릭됨
-							String comment_id = (String) comment_table.getModel().getValueAt(comment_table.getSelectedRow(),0);
-							String writer_id = (String) comment_table.getModel().getValueAt(comment_table.getSelectedRow(),3);
-							String message2 = JOptionPane.showInputDialog("대댓글을 입력하세요");
+							String parent_id = (String) comment_table.getModel().getValueAt(comment_table.getSelectedRow(),0);
+							String writer_id = (String) user_id;
+							String content = JOptionPane.showInputDialog("대댓글을 입력하세요");
 							
-							String s1 = "insert into child_comment (writer_id,comment_id,content) " +
-	                                " values ( \'" + comment_id + "\', \'" + writer_id + "\',message2)";
-							System.out.println(s1);
+							String s1 = "insert into comment (post_id, writer_id, parent_id, content) " +
+	                                " values ( \'" + post_idx + "\', " + "\'" + writer_id + "\', \'" 
+									               + parent_id + "\', \'" + content + "\')";
+							
 	                        try (Connection con = JDBC.connection()){
 								pstm = con.prepareStatement(s1);
 								pstm.executeUpdate();
+								
+								// 창 다시 띄우기 //
+								new post_page(post_idx, user_id, 1);
+				            	post_page.setVisible(false);
+				            	
 							} catch (SQLException e1) {
 								e1.printStackTrace();
 							}
