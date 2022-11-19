@@ -16,10 +16,9 @@ public class Main {
 
 
 		try {
-			final String url = "jdbc:mysql://localhost:3306/twitter_test_db?autoReconnect=true";
+			final String url = "jdbc:mysql://localhost:3306/twitter_db?autoReconnect=true";
 		    final String user = "root";
 			final String passwd = "1q2w3e4r!";
-			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			con = DriverManager.getConnection(url, user, passwd);
@@ -209,7 +208,7 @@ public class Main {
 	                            		System.out.println("Enter Comment content");
 	                            		text = sc.nextLine();
 	                            		
-	                            		s1 = "insert into comment (writer_id,post_id,content,date) values (\'" + id + "\' ,\'" + pidx + "\' ,\'" + text + "\' , default )";
+	                            		s1 = "insert into comment (writer_id,post_id,content,parent_id,date) values (\'" + id + "\' ,\'" + pidx + "\' ,\'" + text + "\' ,NULL, default )";
 	                            		System.out.println(s1);
 	                  
 	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
@@ -220,6 +219,7 @@ public class Main {
 	                        				cidx = rs.getString(1); // 키값 초기화
 	                        				System.out.println("autoIncrement: " + cidx); // 출력
 	                        			}               
+	                                        
 	                                    
 	                                    do {
 
@@ -302,6 +302,7 @@ public class Main {
 	                            		break;
 	                            		
 	                            	case 2:
+	                            		
 	                            		skip = sc.nextLine();
 	                            		System.out.println("Enter comment_idx");
 	                            		
@@ -314,7 +315,7 @@ public class Main {
 	                        			if(rs.next()) {
 	                        				System.out.println("Enter comment");
 	                        				text = sc.nextLine();
-	                        				s1 = "insert into comment (writer_id,post_id,content,date) values (\'" + id + "\' ,\'" + rs.getInt(1) + "\' ,\'" + text + "\' , default )";
+	                        				s1 = "insert into comment (writer_id,post_id,content,parent_id,date) values (\'" + id + "\' ,\'" + rs.getInt(1) + "\' ,\'" + text + "\' ,\'"+cidx+"\', default )";
 		                            		System.out.println(s1);
 		                  
 		                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
@@ -322,11 +323,8 @@ public class Main {
 		                                    
 		                                    rs = pstm.getGeneratedKeys(); // 쿼리 실행 후 생성된 키 값 반환
 		                        			if (rs.next()) {
-		                        				String ccidx = rs.getString(1); // 키값 초기화
-		                        				s1 = "insert into comment_child(comment_child_id, comment_id) values(\'"+ccidx+"\',\'"+cidx+"\')";
-		                        				pstm = con.prepareStatement(s1);
-			                                    pstm.executeUpdate();
-		                        				System.out.println("autoIncrement: " + ccidx); // 출력
+		                        				cidx = rs.getString(1); // 키값 초기화
+		                        				System.out.println("autoIncrement: " + cidx); // 출력
 		                        			} 
 		                                    
 		                                    do {
@@ -554,7 +552,7 @@ public class Main {
 	                            	case 10:
 	                            		stmt = con.createStatement();
                                     	
-                                    	s1 = "select c.comment_id,c.post_id, c.content,c.writer_id,c.child_comment_id ,COUNT(cl.comment_id) as num_of_likes from comment as c left join comment_like as cl on c.comment_id = cl.comment_id group by c.comment_id having  writer_id = \"" + id + "\"";
+                                    	s1 = "select c.comment_id,c.post_id, c.content,c.writer_id,c.parent_id ,COUNT(cl.comment_id) as num_of_likes from comment as c left join comment_like as cl on c.comment_id = cl.comment_id group by c.comment_id having  writer_id = \"" + id + "\"";
                                     
                                     	System.out.println(s1);
 	                                    rs = stmt.executeQuery(s1);
@@ -567,8 +565,8 @@ public class Main {
 	                                        System.out.print("post id : " + result2 + " ");
 	                                        String result3 = rs.getString("content");
 	                                        System.out.println("content : " + result3 + " ");
-	                                        String result4 = rs.getString("child_comment_id");
-	                                        System.out.println("child_comment_id : " + result4 + " ");
+	                                        String result4 = rs.getString("parent_id");
+	                                        System.out.println("parent_id : " + result4 + " ");
 	                                        String result5 = rs.getString("num_of_likes");
 	                                        System.out.println("num_of_likes : " + result5 + " ");	                                        
 	                                        System.out.println("---------------------------------");
