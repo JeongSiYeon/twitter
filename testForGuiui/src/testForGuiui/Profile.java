@@ -100,7 +100,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
 		return panel;
 	}
 
-	
+	 
 	// Tab
 	public JTabbedPane createTabbedPane(String eid) throws SQLException {
 		JTabbedPane t = new JTabbedPane();	

@@ -270,7 +270,7 @@ public class Board extends JFrame implements ActionListener{
 		    	   public boolean isCellEditable(int row, int column) {
 		    		   return false;
 		    	   }
-		       };
+		       }; 
 		       table.setRowHeight(40); 
 		       JScrollPane scroll = new JScrollPane(table);
 		       scroll.setSize(490,300);

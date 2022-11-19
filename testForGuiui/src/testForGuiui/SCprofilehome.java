@@ -65,7 +65,7 @@ public class SCprofilehome
                 name = rs.getString("name");
                 create_time = rs.getString("create_at");
             }
-
+ 
             String following = "";
             String follower = "";
             String s5 = "select count(follower_id) from following where follower_id = \'" + ssid + "\'";

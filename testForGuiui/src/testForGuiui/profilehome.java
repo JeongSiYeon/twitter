@@ -261,7 +261,7 @@ public class profilehome
 	    		   String roid = (String) table.getModel().getValueAt(row,0);
 	    		   var content = table.getModel().getValueAt(row, 2);
 	    		   
-				   
+				    
  		   try (Connection con = JDBC.connection()){
  			   		PreparedStatement pstm = null;
 				   String s3 = "delete from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";

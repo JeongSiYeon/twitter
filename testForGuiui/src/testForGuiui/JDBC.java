@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class JDBC {
 	static Connection conn = null;
-	
+	 
 	public static Connection connection() {	
 		try {
 			final String url = "jdbc:mysql://localhost/twitter_Final";

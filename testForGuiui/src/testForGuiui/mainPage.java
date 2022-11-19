@@ -234,8 +234,8 @@ public class mainPage extends JFrame implements ActionListener{
 	       String data[][] = new String[100][4];
 	       int i = 0;
 			try (Connection con = JDBC.connection()){
-				
-					
+				 
+					 
 		           String s3 = "select post_id, writer_id, date, content from posts where writer_id = any(select followed_id from following where follower_id = \'" + id + "\') order by post_id desc";
 		           stmt = con.createStatement();
 		           rs = stmt.executeQuery(s3);

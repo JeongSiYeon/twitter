@@ -10,7 +10,7 @@ import java.sql.*;
 public class Find_pw
 {
 	 public Find_pw()
-	 { 
+	 {  
 		 JFrame find_pw = new JFrame();
 		 find_pw.setSize(400,300);
 		 find_pw.setLocationRelativeTo(null);

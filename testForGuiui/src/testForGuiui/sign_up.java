@@ -129,7 +129,7 @@ public class sign_up
 
                 JOptionPane message = new JOptionPane();
 				
-
+ 
 				Statement stmt = null;
 				ResultSet rs = null;
 				PreparedStatement pstm = null;

@@ -52,7 +52,7 @@ public class Explore extends JFrame implements ActionListener{
 	{	 
 		this.getContentPane().setBackground(b);
 		this.setLocationRelativeTo(null);
-		 
+		  
 		
 		// JList를 제어하기 위해 model객체 생성////////////////////////////////////////////
 		model = new DefaultListModel();

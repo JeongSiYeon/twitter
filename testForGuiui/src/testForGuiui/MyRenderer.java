@@ -19,7 +19,7 @@ class MyRenderer extends DefaultTableCellRenderer
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
 		String target_comment_idx = (String) table.getValueAt(row, 0);
 		Color g = new Color(240,240,240);
-
+ 
 		try(Connection con = JDBC.connection()) {
 			String s_ = "select * from comment where comment_id = \'" + target_comment_idx + "\' and parent_id is not null";
 			Statement stmt_ = con.createStatement();

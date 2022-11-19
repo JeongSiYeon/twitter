@@ -14,7 +14,7 @@ public class login
 	private Image img=new ImageIcon(mainPage.class.getResource("../image/twitter.png")).getImage();
 
 
-    public login()
+    public login() 
     {
         JFrame jf = new JFrame();
         jf.setSize(400,450);
