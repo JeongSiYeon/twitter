@@ -1,6 +1,7 @@
 package testForGuiui;
 
 import javax.swing.*;
+import java.util.Random;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -106,6 +107,8 @@ public class Find_pw
 
 	                JOptionPane message = new JOptionPane();
 	                
+	                Random random = new Random();
+	                
 					Statement stmt = null;
 					ResultSet rs = null;
 					PreparedStatement pstm = null;
@@ -117,15 +120,19 @@ public class Find_pw
 	                    rs = stmt.executeQuery(s2);
 	                    if(rs.next())
 	                    {
-	                    	String pw = rs.getString("password");
-	                        message.showMessageDialog(null, "Your password is '" + pw + "'");
+	                    	int npw = random.nextInt(10000);
+	                    	String s3 = "Update user set password = \'" + npw + "\' where user_id = \'" + input_id + "\' and email = \'" + input_email + "\' ";
+	                    	pstm = con.prepareStatement(s3);
+					        pstm.executeUpdate();
+	                        message.showMessageDialog(null, "Password has been reset('" + npw + "')\n" + "[Please Change your Password] ");
 	                    }
 	                    else
 	                    {
 	                    	message.showMessageDialog(null, "Invalid information!");
 
 	                    }
-					   
+	                    new login();
+	                    find_pw.setVisible(false);
 					 
 					}
 					catch (SQLException e)

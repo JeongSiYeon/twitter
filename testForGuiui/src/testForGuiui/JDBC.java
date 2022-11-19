@@ -7,7 +7,7 @@ public class JDBC {
 	
 	public static Connection connection() {	
 		try {
-			final String url = "jdbc:mysql://localhost/twitter_db";
+			final String url = "jdbc:mysql://localhost/twitter_Final";
 		    final String user = "root";
 			final String passwd = "anselmochung24";
 			

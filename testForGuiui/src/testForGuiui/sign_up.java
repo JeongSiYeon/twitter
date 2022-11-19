@@ -50,7 +50,7 @@ public class sign_up
 
         JLabel password = new JLabel("PASSWORD : ");
         password.setSize(80,30);
-        password.setLocation(35,140);
+        password.setLocation(30,140);
         password.setForeground(new Color(128,128,128));
         signup.add(password);
 
