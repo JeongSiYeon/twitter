@@ -1,0 +1,147 @@
+DROP DATABASE twitter_db;
+create database twitter_db;
+use twitter_db;
+
+CREATE TABLE user (
+user_id varchar(10) primary key,
+password varchar(50) not null,
+name varchar(50) not null,
+phone varchar(13) not null,
+email varchar(50) not null ,
+description varchar(100),
+create_at Timestamp NOT null DEFAULT CURRENT_TIMESTAMP
+);
+
+
+create table posts(
+post_id bigint auto_increment primary key,
+writer_id varchar(10) not null ,
+content text not null,
+date TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN KEY (writer_id) references user(user_id) ON UPDATE CASCADE
+);
+
+select * from comment;
+
+create table comment(
+comment_id bigint auto_increment primary key,
+parent_id bigint,
+writer_id varchar(10) not null,
+post_id bigint not null,
+content text not null,
+date TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN KEY (parent_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (writer_id) references user(user_id) ON UPDATE CASCADE,
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE
+);
+
+create table quote_post(
+q_post_id bigint ,
+post_id bigint ,
+PRIMARY KEY(post_id, q_post_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (q_post_id) references posts(post_id) ON UPDATE CASCADE
+);
+
+create table re_tweet_post (
+post_id bigint,
+user_id varchar(10),
+create_at timestamp not null default current_timestamp,
+PRIMARY KEY(post_id, user_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (user_id) references user(user_id) ON UPDATE CASCADE
+);
+
+
+create table post_mention(
+post_id bigint not null,
+mentioner_id varchar(10)  not null,
+PRIMARY KEY(post_id, mentioner_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (mentioner_id) references user(user_id) ON UPDATE CASCADE
+);
+# m_p_id 필드 삭제 , 프라이머리 키 변경
+
+create table comment_mention(
+comment_id bigint,
+mentioner_id varchar(10),
+PRIMARY KEY(comment_id, mentioner_id),
+FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (mentioner_id) references user(user_id) ON UPDATE CASCADE
+);
+# m_c_id 필드 삭제 , 프라이머리 키 변경
+
+create table hash(
+hash_id bigint auto_increment primary key,
+hash_content varchar(20) not null
+);
+
+# 해시 테이블 추가 생성
+# post_hash, comment_hash  필드 값 변경
+
+create table post_hash(
+post_id bigint ,
+hash_id bigint,
+PRIMARY KEY(post_id, hash_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (hash_id) references hash(hash_id) ON UPDATE CASCADE
+);
+
+create table comment_hash(
+comment_id bigint ,
+hash_id bigint,
+PRIMARY KEY(comment_id, hash_id),
+FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (hash_id) references hash(hash_id) ON UPDATE CASCADE
+);
+
+
+
+# 프라이머리 키 변경
+
+create table post_like(
+post_id bigint,
+liker_id varchar(10),
+create_at Timestamp NOT null DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(post_id, liker_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (liker_id) references user(user_id) ON UPDATE CASCADE
+);
+
+create table comment_like(
+comment_id bigint,
+liker_id varchar(10),
+create_at Timestamp NOT null DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(comment_id, liker_id),
+FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (liker_id) references user(user_id) ON UPDATE CASCADE
+);
+
+# post_like, comment_like 기존 프라이머리 키 삭제 , 프라이머리 키 변경
+
+create table following(
+follower_id varchar(10) not null,
+followed_id varchar(10) not null,
+create_at Timestamp NOT null DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(follower_id, followed_id),
+FOREIGN KEY (follower_id) references user(user_id) ON UPDATE CASCADE,
+FOREIGN KEY (followed_id) references user(user_id) ON UPDATE CASCADE
+);
+
+create table comment_hash(
+comment_id bigint ,
+hash_id bigint,
+PRIMARY KEY(comment_id, hash_id),
+FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (hash_id) references hash(hash_id) ON UPDATE CASCADE
+);
+
+create table block(
+user_id varchar(10) not null,
+block_id varchar(10) not null,
+create_at Timestamp NOT null DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY(user_id, block_id ),
+FOREIGN KEY (user_id) references user(user_id) ON UPDATE CASCADE,
+FOREIGN KEY (block_id) references user(user_id) ON UPDATE CASCADE
+);
+
