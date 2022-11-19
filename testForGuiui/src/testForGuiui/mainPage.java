@@ -230,21 +230,22 @@ public class mainPage extends JFrame implements ActionListener{
 	            }
 	        });
 	       
-	       String post[] = {"id", "create_time", "post_content"};
-	       String data[][] = new String[100][3];
+	       String columnTitle[] = {"post id", "writer id", "create_time", "post_content"};
+	       String data[][] = new String[100][4];
 	       int i = 0;
 			try (Connection con = JDBC.connection()){
 				
 					
-		           String s3 = "select writer_id, date, content from posts where writer_id = any(select followed_id from following where follower_id = \'" + id + "\') order by post_id desc";
+		           String s3 = "select post_id, writer_id, date, content from posts where writer_id = any(select followed_id from following where follower_id = \'" + id + "\') order by post_id desc";
 		           stmt = con.createStatement();
 		           rs = stmt.executeQuery(s3);
 		           
 		           while(rs.next())
 		           {
-		               data[i][0] = rs.getString("writer_id");
-		               data[i][1] = rs.getString("date");
-		               data[i][2] = rs.getString("content");
+		        	   data[i][0] = rs.getString("post_id");
+		               data[i][1] = rs.getString("writer_id");
+		               data[i][2] = rs.getString("date");
+		               data[i][3] = rs.getString("content");
 		               i++;
 		           }
 		           
@@ -252,13 +253,14 @@ public class mainPage extends JFrame implements ActionListener{
 			}catch(SQLException E) {
 				E.printStackTrace();
 			}
+			
+			table = new JTable(data, columnTitle) {
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
+		
 	      
-	       
-	       table = new JTable(data, post) {
-	    	   public boolean isCellEditable(int row, int column) {
-	    		   return false;
-	    	   }
-	       };
 	       
 	       table.setRowHeight(40);
 	       JScrollPane scroll = new JScrollPane(table);
@@ -270,48 +272,22 @@ public class mainPage extends JFrame implements ActionListener{
 	       table.addMouseListener(new MouseAdapter () { 
 	    	   @Override
 	    	   public void mouseClicked(MouseEvent e) {
-	    	   if (e.getButton() == 1) {
-	    		   int row = table.getSelectedRow();
-	    		   int col = table.getSelectedColumn();
-	    		   
-	    		   String roid = (String) table.getModel().getValueAt(row,0);
-	    		   var content = table.getModel().getValueAt(row, 2);
-	    		   Connection con = JDBC.connection();
- 		   try {
-				   int k = 1;
-				   String s3 = "select post_id from posts where writer_id = \'" + roid + "\' and content = \'" + content + "\'";
-				   stmt = con.createStatement();
-				   rs = stmt.executeQuery(s3);
-				   
-				   while(rs.next()) {
-					   String poid = rs.getString("post_id");
-					   new post_page(poid, id, k); //여기에 포스트 페이지  
-					   setVisible(false);
-				   }
-				 
- 		   }catch(SQLException E) {
-				   E.printStackTrace();
- 		   }
-	    		
-	    	   } 
+	    		   if (e.getButton() == 1) {
+	    			   int row = table.getSelectedRow();
+	    			   String poid = (String) table.getModel().getValueAt(row,0);
+	    			   var newPage = new post_page(poid, id, 1); //여기에 포스트 페이지  
+	    			   setVisible(false);
+	    		   } 
 	    	   }
-	    	   });
-	  
-		   
-	       
+	       });
 	    }
+	    
+	    
 	    @Override
-		public void actionPerformed(ActionEvent e) {
-			
-			
+		public void actionPerformed(ActionEvent e) {		
 			if(e.getSource() == exit)
 			{
 				System.exit(0);
 			}
-						
 		}
-	    
-	  
-		
 	}
-
