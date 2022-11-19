@@ -86,7 +86,7 @@ public class Profile extends JFrame implements ActionListener{//profile home
 				String result = rs.getString(1) + "\n\n";
 				resultArea.append(result);
 				
-			}
+			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

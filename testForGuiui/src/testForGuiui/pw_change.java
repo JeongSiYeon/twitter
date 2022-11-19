@@ -76,7 +76,7 @@ public class pw_change
         done.setOpaque(true);
         done.setBorderPainted(false);
         pw_change.add(done);
-
+ 
         JButton back = new JButton("Back");
         back.setSize(350,30);
         back.setLocation(15,220);

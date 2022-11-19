@@ -419,7 +419,7 @@ public class post_page
 		                        new post_page(post_idx,user_id,k);
 
 		                    }
-		                }
+		                } 
 		                catch (SQLException E)
 		                {
 		                    E.printStackTrace();

@@ -50,7 +50,7 @@ public class SCprofilehome
             ResultSet rs = null;
             PreparedStatement pstm = null;
 
-            stmt = con.createStatement();
+            stmt = con.createStatement(); 
 
             String s4 = "select user_id,name,create_at from user where user_id = \'" + ssid + "\'";
             rs = stmt.executeQuery(s4);

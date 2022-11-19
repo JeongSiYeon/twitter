@@ -229,7 +229,7 @@ public class mainPage extends JFrame implements ActionListener{
 	            	setVisible(false);
 	            }
 	        });
-	       
+	        
 	       String columnTitle[] = {"post id", "writer id", "create_time", "post_content"};
 	       String data[][] = new String[100][4];
 	       int i = 0;

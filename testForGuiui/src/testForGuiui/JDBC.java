@@ -1,6 +1,6 @@
 package testForGuiui;
 
-import java.sql.*;
+import java.sql.*; 
 
 public class JDBC {
 	static Connection conn = null;

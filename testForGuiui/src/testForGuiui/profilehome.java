@@ -244,7 +244,7 @@ public class profilehome
 	       scroll.setSize(480,235);
         scroll.setLocation(20,300);
 	       
-	       profile.add(scroll);
+	       profile.add(scroll); 
 	       
 	       table.addMouseListener(new MouseAdapter () { 
 	    	   @Override
