@@ -1,6 +1,6 @@
 DROP DATABASE twitter_db;
-CREATE DATABASE twitter_db;
-
+create database twitter_db;
+use twitter_db;
 
 CREATE TABLE user (
 user_id varchar(10) primary key,
@@ -17,10 +17,23 @@ create table posts(
 post_id bigint auto_increment primary key,
 writer_id varchar(10) not null ,
 content text not null,
-date TIMESTAMP NOT NULL	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+date TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 FOREIGN KEY (writer_id) references user(user_id) ON UPDATE CASCADE
 );
 
+select * from comment;
+
+create table comment(
+comment_id bigint auto_increment primary key,
+parent_id bigint,
+writer_id varchar(10) not null,
+post_id bigint not null,
+content text not null,
+date TIMESTAMP NOT NULL   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+FOREIGN KEY (parent_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (writer_id) references user(user_id) ON UPDATE CASCADE,
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE
+);
 
 create table quote_post(
 q_post_id bigint ,
@@ -30,29 +43,14 @@ FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
 FOREIGN KEY (q_post_id) references posts(post_id) ON UPDATE CASCADE
 );
 
-# user_id 필드 삭제
-
-create table comment(
-comment_id bigint auto_increment primary key,
-writer_id varchar(10) not null,
-post_id bigint not null,
-content text not null,
-date TIMESTAMP NOT NULL	DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-FOREIGN KEY (writer_id) references user(user_id) ON UPDATE CASCADE,
-FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE
+create table re_tweet_post (
+post_id bigint,
+user_id varchar(10),
+create_at timestamp not null default current_timestamp,
+PRIMARY KEY(post_id, user_id),
+FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
+FOREIGN KEY (user_id) references user(user_id) ON UPDATE CASCADE
 );
-
-# child_comment_id 필드 삭제
-
-create table comment_child(
-comment_child_id bigint,
-comment_id bigint,
-PRIMARY KEY(comment_child_id, comment_id),
-FOREIGN KEY (comment_child_id) references comment(comment_id) ON UPDATE CASCADE,
-FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE
-);
-
-# child_comment_id 테이블 추가 생성
 
 
 create table post_mention(
@@ -98,14 +96,6 @@ FOREIGN KEY (hash_id) references hash(hash_id) ON UPDATE CASCADE
 );
 
 
-create table re_tweet_post (
-post_id bigint,
-user_id varchar(10),
-create_at timestamp not null default current_timestamp,
-PRIMARY KEY(post_id, user_id),
-FOREIGN KEY (post_id) references posts(post_id) ON UPDATE CASCADE,
-FOREIGN KEY (user_id) references user(user_id) ON UPDATE CASCADE
-);
 
 # 프라이머리 키 변경
 
@@ -138,6 +128,14 @@ FOREIGN KEY (follower_id) references user(user_id) ON UPDATE CASCADE,
 FOREIGN KEY (followed_id) references user(user_id) ON UPDATE CASCADE
 );
 
+create table comment_hash(
+comment_id bigint ,
+hash_id bigint,
+PRIMARY KEY(comment_id, hash_id),
+FOREIGN KEY (comment_id) references comment(comment_id) ON UPDATE CASCADE,
+FOREIGN KEY (hash_id) references hash(hash_id) ON UPDATE CASCADE
+);
+
 create table block(
 user_id varchar(10) not null,
 block_id varchar(10) not null,
@@ -146,3 +144,4 @@ PRIMARY KEY(user_id, block_id ),
 FOREIGN KEY (user_id) references user(user_id) ON UPDATE CASCADE,
 FOREIGN KEY (block_id) references user(user_id) ON UPDATE CASCADE
 );
+
