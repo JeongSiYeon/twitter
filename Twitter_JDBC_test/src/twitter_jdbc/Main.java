@@ -16,11 +16,13 @@ public class Main {
 
 
 		try {
-			String dbURL = "jdbc:mysql://localhost/twitter_db?autoReconnect=true";
-			String dbID = "root";
-			String dbPassword = "1234";
+			final String url = "jdbc:mysql://localhost:3306/twitter_test_db?autoReconnect=true";
+		    final String user = "root";
+			final String passwd = "1q2w3e4r!";
+			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection(dbURL, dbID, dbPassword);
+			
+			con = DriverManager.getConnection(url, user, passwd);
 
 			try {
 				while (true) {
@@ -37,6 +39,7 @@ public class Main {
 					String cidx = null;
 					String qpidx = null;
 					String oid = null;
+					String hidx = null;
 					
 					System.out.println("Input zero to sign up, one to login");
 					menu = sc.nextInt();
@@ -62,7 +65,7 @@ public class Main {
                         else
                         {
                             s1 = "insert into user values ( \'" + id + "\', \'" + pw + "\', \'" + name + "\', \'"+ phonenumber + "\', \'" + email + "\',NULL, default)";
-                            System.out.println(s1);
+                           
                             pstm = con.prepareStatement(s1);
                             pstm.executeUpdate();
                             
@@ -71,7 +74,7 @@ public class Main {
                             if(menu == 0) {
                             	desc = sc.next();
                             	s1 = "update user set description = \'" +desc+ "\' where user_id = \"" +  id + "\"";
-                                System.out.println(s1);
+                                
                                 pstm = con.prepareStatement(s1);
                                 pstm.executeUpdate();
                             }
@@ -93,7 +96,8 @@ public class Main {
 	                            System.out.println("Success Log in !!! ");
 	                            do {
 	                            	System.out.println("0 to write post, 1 to write comment, 2 to write child_comment, 3 to like post, 4 to like comment,5 to see my follower,\n" +
-                                            "6 to see my following, 7 to follow someone, 8 to retweet, 9 to see my post and edit ,10 to see my comment and edit,11 to modify my information,12 to see other users' boards, 13 to write quote_post, 14 to block user,  15 to logout");
+                                            "6 to see my following, 7 to follow someone, 8 to retweet, 9 to see my post and edit ,10 to see my comment and edit,\n"+
+	                            			"11 to modify my information,12 to see other users' boards, 13 to write quote_post, 14 to block user,  15 to logout");
 	                            	menu = sc.nextInt();
 	                            	
 	                            	switch(menu) {
@@ -102,7 +106,7 @@ public class Main {
 	                            		skip = sc.nextLine();
 	                            		String text = sc.nextLine();
 	                            		s1 = "insert into posts (content,writer_id,date) values (\'" + text + "\' ,\'"+id+"\', default )";
-	                            		System.out.println(s1);
+	                            		
 
 	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
 	                                    pstm.executeUpdate();
@@ -120,14 +124,39 @@ public class Main {
 	                                    switch(menu) {
 	                					case 0:
 	                						
-                							System.out.println("write your hashtag");
+	                						System.out.println("write your hashtag");
                 							skip =sc.nextLine();
                 							String hash =sc.nextLine();
                 							
-                							s1 = "insert into post_hash(p_content,post_id) value(\'"+hash+"\',\'"+pidx+"\')";
-                							System.out.println(s1);
-                							pstm= con.prepareStatement(s1);
-                							pstm.executeUpdate();
+                							s1 = "select hash_id from hash where hash_content=\'"+hash+"\'";
+                							rs=stmt.executeQuery(s1);
+                							if(rs.next()) {
+                								hidx = rs.getString(1); 
+                								s1 = "insert into post_hash(post_id,hash_id) value(\'"+pidx+"\',\'"+hidx+"\')";
+                								System.out.println(s1);
+                								pstm= con.prepareStatement(s1);
+                								pstm.executeUpdate();
+                							}
+                							else {
+                								
+    	                            		s1 = "insert into hash (hash_content) values (\'" + hash + "\')";
+    	                            		
+
+    	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
+    	                                    pstm.executeUpdate();
+    	                                    
+    	                                    rs = pstm.getGeneratedKeys(); // 쿼리 실행 후 생성된 키 값 반환
+        	                        			if (rs.next()) {
+        	                        				hidx = rs.getString(1); // 키값 초기화
+        	                        				System.out.println("autoIncrement: " + hidx); // 출력
+        	                        			}
+	                							
+	                							s1 = "insert into post_hash(post_id,hash_id) value(\'"+pidx+"\',\'"+hidx+"\')";
+	                							System.out.println(s1);
+	                							pstm= con.prepareStatement(s1);
+	                							pstm.executeUpdate();
+	                							
+	                							}
                 						    break;
 	                					case 1:
 	                						stmt = con.createStatement();
@@ -180,7 +209,7 @@ public class Main {
 	                            		System.out.println("Enter Comment content");
 	                            		text = sc.nextLine();
 	                            		
-	                            		s1 = "insert into comment (writer_id,post_id,content,child_comment_id,date) values (\'" + id + "\' ,\'" + pidx + "\' ,\'" + text + "\' ,NULL, default )";
+	                            		s1 = "insert into comment (writer_id,post_id,content,date) values (\'" + id + "\' ,\'" + pidx + "\' ,\'" + text + "\' , default )";
 	                            		System.out.println(s1);
 	                  
 	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
@@ -202,10 +231,35 @@ public class Main {
 	                							skip =sc.nextLine();
 	                							String hash =sc.nextLine();
 	                							
-	                							s1 = "insert into comment_hash(h_content,comment_id) value(\'"+hash+"\',\'"+cidx+"\')";
-	                							System.out.println(s1);
-	                							pstm= con.prepareStatement(s1);
-	                							pstm.executeUpdate();
+	                							s1 = "select hash_id from hash where hash_content=\'"+hash+"\'";
+	                							rs=stmt.executeQuery(s1);
+	                							if(rs.next()) {
+	                								hidx = rs.getString(1); 
+	                								s1 = "insert into comment_hash(comment_id,hash_id) value(\'"+cidx+"\',\'"+hidx+"\')";
+	                								System.out.println(s1);
+	                								pstm= con.prepareStatement(s1);
+	                								pstm.executeUpdate();
+	                							}
+	                							else {
+	                								
+        	                            		s1 = "insert into hash (hash_content) values (\'" + hash + "\')";
+        	                            		
+
+        	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
+        	                                    pstm.executeUpdate();
+        	                                    
+        	                                    rs = pstm.getGeneratedKeys(); // 쿼리 실행 후 생성된 키 값 반환
+	        	                        			if (rs.next()) {
+	        	                        				hidx = rs.getString(1); // 키값 초기화
+	        	                        				System.out.println("autoIncrement: " + hidx); // 출력
+	        	                        			}
+		                							
+		                							s1 = "insert into comment_hash(comment_id,hash_id) value(\'"+cidx+"\',\'"+hidx+"\')";
+		                							System.out.println(s1);
+		                							pstm= con.prepareStatement(s1);
+		                							pstm.executeUpdate();
+		                							
+		                							}
 	                						    break;
 		                					case 1:
 		                						stmt = con.createStatement();
@@ -260,7 +314,7 @@ public class Main {
 	                        			if(rs.next()) {
 	                        				System.out.println("Enter comment");
 	                        				text = sc.nextLine();
-	                        				s1 = "insert into comment (writer_id,post_id,content,child_comment_id,date) values (\'" + id + "\' ,\'" + rs.getInt(1) + "\' ,\'" + text + "\' ,\'"+cidx+"\', default )";
+	                        				s1 = "insert into comment (writer_id,post_id,content,date) values (\'" + id + "\' ,\'" + rs.getInt(1) + "\' ,\'" + text + "\' , default )";
 		                            		System.out.println(s1);
 		                  
 		                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
@@ -268,8 +322,11 @@ public class Main {
 		                                    
 		                                    rs = pstm.getGeneratedKeys(); // 쿼리 실행 후 생성된 키 값 반환
 		                        			if (rs.next()) {
-		                        				cidx = rs.getString(1); // 키값 초기화
-		                        				System.out.println("autoIncrement: " + cidx); // 출력
+		                        				String ccidx = rs.getString(1); // 키값 초기화
+		                        				s1 = "insert into comment_child(comment_child_id, comment_id) values(\'"+ccidx+"\',\'"+cidx+"\')";
+		                        				pstm = con.prepareStatement(s1);
+			                                    pstm.executeUpdate();
+		                        				System.out.println("autoIncrement: " + ccidx); // 출력
 		                        			} 
 		                                    
 		                                    do {
@@ -277,15 +334,40 @@ public class Main {
 			                                    System.out.println("ADD 0 to Hashtag 1 to mention 2 to exit?");
 			                                    menu = sc.nextInt();
 			                                    switch(menu) {
-			                					case 0:
+			                                    case 0:
 		                							System.out.println("write your hashtag");
 		                							skip =sc.nextLine();
 		                							String hash =sc.nextLine();
 		                							
-		                							s1 = "insert into comment_hash(h_content,comment_id) value(\'"+hash+"\',\'"+cidx+"\')";
-		                							System.out.println(s1);
-		                							pstm= con.prepareStatement(s1);
-		                							pstm.executeUpdate();
+		                							s1 = "select hash_id from hash where hash_content=\'"+hash+"\'";
+		                							rs=stmt.executeQuery(s1);
+		                							if(rs.next()) {
+		                								hidx = rs.getString(1); 
+		                								s1 = "insert into comment_hash(comment_id,hash_id) value(\'"+cidx+"\',\'"+hidx+"\')";
+		                								System.out.println(s1);
+		                								pstm= con.prepareStatement(s1);
+		                								pstm.executeUpdate();
+		                							}
+		                							else {
+		                								
+	        	                            		s1 = "insert into hash (hash_content) values (\'" + hash + "\')";
+	        	                            		
+
+	        	                            		pstm = con.prepareStatement(s1,Statement.RETURN_GENERATED_KEYS);
+	        	                                    pstm.executeUpdate();
+	        	                                    
+	        	                                    rs = pstm.getGeneratedKeys(); // 쿼리 실행 후 생성된 키 값 반환
+		        	                        			if (rs.next()) {
+		        	                        				hidx = rs.getString(1); // 키값 초기화
+		        	                        				System.out.println("autoIncrement: " + hidx); // 출력
+		        	                        			}
+			                							
+			                							s1 = "insert into comment_hash(comment_id,hash_id) value(\'"+cidx+"\',\'"+hidx+"\')";
+			                							System.out.println(s1);
+			                							pstm= con.prepareStatement(s1);
+			                							pstm.executeUpdate();
+			                							
+			                							}
 		                						    break;
 			                					case 1:
 			                						stmt = con.createStatement();
@@ -427,7 +509,7 @@ public class Main {
 	                					}
 	                            		else {
 	                							               						
-                							s1= "insert into re_tweet_post(post_id,user_id,creat_at) value(\'" + pidx + "\','" +id +"\',DEFAULT)";
+                							s1= "insert into re_tweet_post(post_id,user_id,create_at) value(\'" + pidx + "\','" +id +"\',DEFAULT)";
                 							System.out.println(s1);
                 							pstm = con.prepareStatement (s1); 
                 							pstm.executeUpdate();
@@ -673,7 +755,7 @@ public class Main {
 			                							}
 			                                    
 			                        			}while(menu!=2);
-		                                    s1= "insert into quote_post(post_id,q_post_id,user_id,create_at) value(\'"+qpidx+"\', \'" + pidx + "\','" +id +"\',DEFAULT)";
+		                                    s1= "insert into quote_post(q_post_id,post_id) value(\'"+pidx+"\', \'" + qpidx + "\')";
 	            							System.out.println(s1);
 	            							pstm = con.prepareStatement (s1); 
 	            							pstm.executeUpdate();
